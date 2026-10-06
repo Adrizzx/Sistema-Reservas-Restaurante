@@ -240,7 +240,7 @@ Proyecto grupal de la asignatura **Modelos de Procesos de Software**, Universida
 
 | Integrantes |
 |---|
-| **Marco Adrián Padilla Triviño** ([@Adrizzx](https://github.com/Adrizzx)) |
+| **Marco Adrian Padilla Triviño** ([@Adrizzx](https://github.com/Adrizzx)) |
 | Joffre Esteban Gómez Quinaluisa |
 | Rubén Alejandro Bustos Viteri |
 | Adonny Mateo Calero Argüello |
