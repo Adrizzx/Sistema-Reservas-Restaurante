@@ -1,0 +1,1854 @@
+/* ================================
+   RESTAURANTE ELEGANTE
+   Sistema de Reservas de Mesas Digital
+   ================================ */
+
+/* IMPORTAR FUENTES ELEGANTES */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Crimson+Text:wght@400;600;700&display=swap');
+
+/* VARIABLES CSS - TEMA RESTAURANTE ELEGANTE */
+:root {
+    /* Paleta de colores principales - Tonos café y negro elegante */
+    --primary-color: #2d1b12;
+    --primary-light: #4a3529;
+    --primary-dark: #1a0e09;
+    --secondary-color: #8b4513;
+    --secondary-light: #cd853f;
+    --accent-color: #d4af37;
+    --accent-light: #ffd700;
+
+    /* Colores de estado adaptados al tema */
+    --success-color: #8b4513;
+    --warning-color: #ff8c00;
+    --error-color: #8b0000;
+    --info-color: #cd853f;
+
+    /* Fondos y superficies elegantes */
+    --light-bg: #faf8f5;
+    --surface-light: #ffffff;
+    --surface-elevated: #f5f2ed;
+    --cream-bg: #fff8dc;
+
+    /* Textos elegantes */
+    --text-primary: #2d1b12;
+    --text-secondary: #5d4e37;
+    --text-muted: #8b7355;
+    --text-light: #ffffff;
+
+    /* Sombras elegantes con tonos cálidos */
+    --shadow-sm: 0 1px 2px 0 rgba(45, 27, 18, 0.1);
+    --shadow: 0 1px 3px 0 rgba(45, 27, 18, 0.15), 0 1px 2px -1px rgba(45, 27, 18, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(45, 27, 18, 0.15), 0 2px 4px -2px rgba(45, 27, 18, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(45, 27, 18, 0.2), 0 4px 6px -4px rgba(45, 27, 18, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(45, 27, 18, 0.25), 0 8px 10px -6px rgba(45, 27, 18, 0.1);
+    --shadow-warm: 0 8px 32px rgba(212, 175, 55, 0.15);
+
+    /* Gradientes elegantes de restaurante */
+    --gradient-primary: linear-gradient(135deg, #2d1b12 0%, #4a3529 100%);
+    --gradient-secondary: linear-gradient(135deg, #8b4513 0%, #cd853f 100%);
+    --gradient-gold: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    --gradient-hero: linear-gradient(135deg, #2d1b12 0%, #4a3529 50%, #8b4513 100%);
+    --gradient-warm: linear-gradient(135deg, #fff8dc 0%, #f5f2ed 100%);
+
+    /* Bordes y radios elegantes */
+    --border-radius: 0.75rem;
+    --border-radius-sm: 0.5rem;
+    --border-radius-lg: 1rem;
+    --border-radius-xl: 1.5rem;
+
+    /* Variables modo oscuro adaptadas para restaurante */
+    --dark-bg-primary: #1a0e09;
+    --dark-bg-secondary: #2d1b12;
+    --dark-surface: #4a3529;
+    --dark-text: #fff8dc;
+    --dark-text-muted: #cd853f;
+    --dark-border: #5d4e37;
+    --dark-shadow: 0 4px 6px -1px rgba(26, 14, 9, 0.4), 0 2px 4px -2px rgba(26, 14, 9, 0.3);
+}
+
+/* RESETEO Y BASE MEJORADO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+/* BODY ELEGANTE PARA RESTAURANTE */
+body {
+    font-family: 'Inter', 'Crimson Text', Georgia, serif;
+    line-height: 1.7;
+    color: var(--text-primary);
+    background: var(--gradient-warm);
+    min-height: 100vh;
+    padding-top: 80px;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* HEADER PRINCIPAL ELEGANTE PARA RESTAURANTE */
+.main-header {
+    background: var(--gradient-hero);
+    color: var(--text-light);
+    padding: 5rem 0;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+}
+
+.main-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.2) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(139, 69, 19, 0.15) 0%, transparent 60%);
+    animation: float 8s ease-in-out infinite;
+}
+
+.main-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(135deg, transparent 0%, var(--light-bg) 100%);
+    clip-path: polygon(0 100%, 100% 100%, 100% 0%, 0 60%);
+}
+
+.logo-container {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.logo-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    animation: float 4s ease-in-out infinite;
+    display: inline-block;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-8px) rotate(1deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(-8px) rotate(-1deg);
+    }
+}
+
+.restaurant-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+}
+
+.restaurant-subtitle {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    font-weight: 400;
+    font-style: italic;
+    opacity: 0.95;
+    margin-bottom: 2.5rem;
+    color: rgba(255, 248, 220, 0.95);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.5px;
+}
+
+/* TARJETAS DE SELECCIÓN MEJORADAS */
+.selection-container {
+    padding: 6rem 0;
+    background: var(--light-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.selection-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 70% 20%, rgba(30, 64, 175, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(5, 150, 105, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.section-title {
+    text-align: center;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4rem;
+    position: relative;
+    z-index: 2;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    box-shadow: var(--shadow);
+}
+
+.user-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.user-card {
+    background: var(--surface-light);
+    border-radius: var(--border-radius-xl);
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.user-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--gradient-gold);
+}
+
+.user-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-warm);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.user-card:hover::after {
+    opacity: 1;
+}
+
+.user-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+}
+
+.user-card:hover .user-icon {
+    transform: scale(1.1) rotate(3deg);
+    filter: drop-shadow(0 6px 12px rgba(212, 175, 55, 0.4));
+}
+
+.user-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.user-description {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-custom {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    font-size: 1rem;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.btn-custom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-custom:hover::before {
+    left: 100%;
+}
+
+.btn-custom:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: var(--gradient-secondary);
+}
+
+.btn-secondary:hover {
+    box-shadow: var(--shadow-xl);
+}
+
+/* FOOTER MEJORADO */
+.main-footer {
+    background: linear-gradient(135deg, var(--text-primary) 0%, #1e293b 100%);
+    color: var(--text-light);
+    text-align: center;
+    padding: 3rem 0;
+    margin-top: 6rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-footer::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(135deg, var(--light-bg) 0%, transparent 100%);
+    clip-path: polygon(0 0%, 100% 100%, 100% 100%, 0% 100%);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+.footer-icon {
+    font-size: 1.75rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* EFECTOS FLOTANTES MEJORADOS */
+.floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.floating-element {
+    position: absolute;
+    color: rgba(139, 69, 19, 0.08);
+    font-size: 2.5rem;
+    animation: floatRandom 18s linear infinite;
+    filter: blur(0.3px);
+    opacity: 0.6;
+}
+
+@keyframes floatRandom {
+    0% {
+        transform: translateY(110vh) rotate(0deg) scale(0.8);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: translateY(50vh) rotate(180deg) scale(1);
+    }
+
+    95% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-10vh) rotate(360deg) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* ANIMACIONES DE CARGA MEJORADAS */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in-left {
+    animation: fadeInLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in-right {
+    animation: fadeInRight 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.delay-1 {
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+}
+
+.delay-2 {
+    animation-delay: 0.4s;
+    animation-fill-mode: both;
+}
+
+.delay-3 {
+    animation-delay: 0.6s;
+    animation-fill-mode: both;
+}
+
+/* RESPONSIVE MEJORADO */
+@media (max-width: 1200px) {
+    .user-cards {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-header {
+        padding: 2rem 0;
+        min-height: 60vh;
+    }
+
+    .selection-container {
+        padding: 4rem 0;
+    }
+
+    .user-cards {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    .user-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .navbar {
+        padding: 0.75rem 0;
+    }
+
+    .floating-element {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        min-height: 50vh;
+    }
+
+    .user-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .btn-custom {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ===============================
+   NAVBAR ELEGANTE PARA RESTAURANTE
+   =============================== */
+.navbar {
+    backdrop-filter: blur(20px) !important;
+    background: #000000 !important;
+    background-color: #000000 !important;
+    box-shadow: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    padding: 1rem 0 !important;
+    border-bottom: none !important;
+}
+
+.navbar-scrolled {
+    background: rgba(0, 0, 0, 0.98) !important;
+    backdrop-filter: blur(25px);
+    box-shadow: none !important;
+    border-bottom: none !important;
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 2px 4px rgba(30, 64, 175, 0.3));
+}
+
+.navbar-nav .nav-link {
+    color: #c9a04c !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.75rem 1.25rem !important;
+    border-radius: var(--border-radius);
+    margin: 0 0.25rem;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+}
+
+.navbar-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: var(--gradient-gold);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #d4af37 !important;
+    background-color: rgba(212, 175, 55, 0.15);
+    transform: translateY(-2px);
+}
+
+.navbar-nav .nav-link:hover::before,
+.navbar-nav .nav-link.active::before {
+    width: 80%;
+}
+
+.navbar-scrolled .navbar-nav .nav-link {
+    color: rgba(255, 248, 220, 0.95) !important;
+}
+
+.navbar-scrolled .navbar-nav .nav-link:hover,
+.navbar-scrolled .navbar-nav .nav-link.active {
+    color: var(--accent-light) !important;
+    background-color: rgba(212, 175, 55, 0.15);
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.25);
+}
+
+.navbar-toggler:hover {
+    background-color: rgba(30, 64, 175, 0.1);
+}
+
+/* ===============================
+   MODO OSCURO MEJORADO
+   =============================== */
+
+/* Estilos modo oscuro */
+body.dark-mode {
+    background: linear-gradient(135deg, var(--dark-bg-primary) 0%, var(--dark-bg-secondary) 100%);
+    color: var(--dark-text);
+}
+
+.dark-mode .navbar {
+    background: rgba(0, 0, 0, 0.98) !important;
+    border-bottom: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.dark-mode .navbar-scrolled {
+    background: rgba(15, 23, 42, 0.98) !important;
+    border: none !important;
+    border-bottom: none !important;
+}
+
+.dark-mode .navbar-brand {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dark-mode .navbar-nav .nav-link {
+    color: var(--dark-text) !important;
+}
+
+.dark-mode .navbar-nav .nav-link:hover,
+.dark-mode .navbar-nav .nav-link.active {
+    color: #60a5fa !important;
+    background-color: rgba(96, 165, 250, 0.1);
+}
+
+.dark-mode .main-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
+}
+
+.dark-mode .selection-container {
+    background: var(--dark-bg-primary);
+}
+
+.dark-mode .selection-container::before {
+    background:
+        radial-gradient(circle at 70% 20%, rgba(96, 165, 250, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(167, 139, 250, 0.03) 0%, transparent 50%);
+}
+
+.dark-mode .section-title {
+    color: var(--dark-text);
+}
+
+.dark-mode .section-title::after {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+}
+
+.dark-mode .user-card {
+    background: var(--dark-bg-secondary);
+    color: var(--dark-text);
+    box-shadow: var(--dark-shadow);
+    border-color: rgba(75, 85, 99, 0.3);
+}
+
+.dark-mode .user-card::before {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+}
+
+.dark-mode .user-card:hover {
+    border-color: rgba(96, 165, 250, 0.4);
+    box-shadow: 0 8px 25px rgba(96, 165, 250, 0.15);
+}
+
+.dark-mode .user-icon {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dark-mode .user-title {
+    color: var(--dark-text);
+}
+
+.dark-mode .user-description {
+    color: var(--dark-text-muted);
+}
+
+.dark-mode .card {
+    background: var(--dark-bg-secondary);
+    color: var(--dark-text);
+    border: 1px solid var(--dark-border);
+}
+
+.dark-mode .card-title {
+    color: var(--dark-text);
+}
+
+.dark-mode .card-text {
+    color: var(--dark-text-muted);
+}
+
+.dark-mode .main-footer {
+    background: linear-gradient(135deg, var(--dark-bg-primary) 0%, #1e1b4b 100%);
+}
+
+.dark-mode .floating-element {
+    color: rgba(96, 165, 250, 0.06);
+}
+
+.dark-mode .btn-outline-primary {
+    color: #60a5fa;
+    border-color: #60a5fa;
+}
+
+.dark-mode .btn-outline-primary:hover {
+    background: #60a5fa;
+    border-color: #60a5fa;
+    color: white;
+}
+
+.dark-mode .badge.bg-light {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+}
+
+/* Efectos adicionales para modo oscuro */
+.dark-mode .btn-custom {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    box-shadow: 0 4px 6px -1px rgba(96, 165, 250, 0.3);
+}
+
+.dark-mode .btn-custom:hover {
+    box-shadow: 0 10px 15px -3px rgba(96, 165, 250, 0.4);
+}
+
+/* Estilos para modales en modo oscuro - MÁXIMA PRIORIDAD */
+.dark-mode .modal-content {
+    background: #1e293b !important;
+    border: 1px solid #475569 !important;
+    color: #000000 !important;
+}
+
+.dark-mode .modal-header {
+    border-bottom-color: #475569 !important;
+    background: #0f172a !important;
+}
+
+.dark-mode .modal-footer {
+    border-top-color: #475569 !important;
+}
+
+.dark-mode .modal-body {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+.dark-mode .modal-body * {
+    color: #000000 !important;
+}
+
+.dark-mode .form-label {
+    color: #000000 !important;
+    font-weight: 600 !important;
+}
+
+.dark-mode .modal-body .form-label {
+    color: #000000 !important;
+}
+
+.dark-mode #ModalProfesor .form-label,
+.dark-mode #ModalCliente .form-label {
+    color: #000000 !important;
+}
+
+.dark-mode .form-control {
+    background: #ffffff !important;
+    border-color: #cccccc !important;
+    color: #000000 !important;
+}
+
+.dark-mode .modal-body .form-control {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+.dark-mode #adminUsuarioModal,
+.dark-mode #adminPasswordModal,
+.dark-mode #loginUsuario,
+.dark-mode #loginPassword,
+.dark-mode #regNombre,
+.dark-mode #regApellido,
+.dark-mode #regCedula,
+.dark-mode #regTelefono,
+.dark-mode #regCiudad,
+.dark-mode #regUsuario,
+.dark-mode #regEmail,
+.dark-mode #regPassword {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #cccccc !important;
+}
+
+.dark-mode .form-control:focus {
+    background: #ffffff !important;
+    border-color: #60a5fa !important;
+    color: #000000 !important;
+    box-shadow: 0 0 0 0.2rem rgba(96, 165, 250, 0.25) !important;
+}
+
+.dark-mode .form-select {
+    background: #ffffff !important;
+    border-color: #cccccc !important;
+    color: #000000 !important;
+}
+
+.dark-mode .form-select:focus {
+    background: #ffffff !important;
+    border-color: #60a5fa !important;
+    color: #000000 !important;
+    box-shadow: 0 0 0 0.2rem rgba(96, 165, 250, 0.25) !important;
+}
+
+.dark-mode .form-control::placeholder {
+    color: #666666 !important;
+    opacity: 1 !important;
+}
+
+.dark-mode .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Tabs en modo oscuro */
+.dark-mode .nav-tabs {
+    border-bottom-color: #cccccc !important;
+}
+
+.dark-mode .nav-tabs .nav-link {
+    color: #333333 !important;
+    border-color: transparent;
+    background: transparent;
+}
+
+.dark-mode .nav-tabs .nav-link:hover {
+    color: #000000 !important;
+    border-color: #cccccc #cccccc transparent;
+    background: #f0f0f0 !important;
+}
+
+.dark-mode .nav-tabs .nav-link.active {
+    color: #000000 !important;
+    background: #ffffff !important;
+    border-color: #cccccc #cccccc #ffffff !important;
+    font-weight: 700 !important;
+}
+
+/* Input groups en modo oscuro */
+.dark-mode .input-group .btn-outline-secondary {
+    background: #ffffff !important;
+    border-color: #cccccc !important;
+    color: #000000 !important;
+}
+
+.dark-mode .input-group .btn-outline-secondary:hover {
+    background: #f0f0f0 !important;
+    border-color: #60a5fa !important;
+    color: #000000 !important;
+}
+
+/* Alertas en modo oscuro */
+.dark-mode .alert-danger {
+    background: rgba(220, 38, 38, 0.15);
+    border-color: rgba(220, 38, 38, 0.3);
+    color: #fca5a5;
+}
+
+.dark-mode .alert-info {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+}
+
+/* Text muted en modo oscuro */
+.dark-mode .text-muted,
+.dark-mode small.text-muted {
+    color: #333333 !important;
+}
+
+.dark-mode .text-info {
+    color: #0066cc !important;
+}
+
+.dark-mode strong {
+    color: #000000 !important;
+}
+
+/* Separadores (hr) en modo oscuro */
+.dark-mode hr {
+    border-color: #30363d;
+    opacity: 1;
+}
+
+/* EFECTOS ESPECIALES Y TRANSICIONES */
+.glass-effect {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode .glass-effect {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+/* Scroll reveal animation */
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    animation: reveal 0.6s ease-out;
+}
+
+/* Shimmer effect for loading */
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 400% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.dark-mode .shimmer {
+    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+    background-size: 400% 100%;
+}
+
+/* Animación de transición suave para modo oscuro */
+*,
+*::before,
+*::after {
+    transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth scrolling con offset para el navbar */
+html {
+    scroll-padding-top: 80px;
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles mejorados */
+.btn-custom:focus,
+.navbar-nav .nav-link:focus {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+}
+
+.dark-mode .btn-custom:focus,
+.dark-mode .navbar-nav .nav-link:focus {
+    outline: 2px solid #60a5fa;
+}
+
+/* ================================
+   MODAL DE ADMINISTRADOR - TEMA ELEGANTE
+   ================================ */
+
+/* Modal backdrop con efecto elegante */
+.modal.show .modal-backdrop {
+    background: rgba(45, 27, 18, 0.7) !important;
+    backdrop-filter: blur(8px);
+}
+
+/* Contenido del modal con tema restaurante */
+.modal-content {
+    border: none !important;
+    border-radius: 15px !important;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl), 0 0 40px rgba(212, 175, 55, 0.2) !important;
+    background: #ffffff !important;
+    color: var(--text-primary) !important;
+}
+
+/* Header del modal de administrador */
+.modal-header {
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
+    padding: 20px 25px !important;
+}
+
+.modal-header .modal-title {
+    font-family: 'Playfair Display', serif !important;
+    font-weight: 700 !important;
+    font-size: 1.4rem !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Cuerpo del modal con espaciado elegante */
+.modal-body {
+    padding: 25px !important;
+    background: #ffffff !important;
+    color: var(--text-primary) !important;
+}
+
+/* Inputs del modal con tema restaurante */
+.modal-body .form-control {
+    border: 2px solid rgba(212, 175, 55, 0.2) !important;
+    border-radius: 10px !important;
+    padding: 12px 16px !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-body .form-control:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    background: #ffffff !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-body .form-control::placeholder {
+    color: rgba(45, 27, 18, 0.5) !important;
+    font-style: italic;
+}
+
+/* Labels del formulario */
+.modal-body .form-label {
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    font-size: 0.95rem !important;
+    color: var(--text-primary) !important;
+}
+
+.modal-body .form-label i {
+    margin-right: 8px !important;
+    font-size: 1.1rem !important;
+    color: var(--accent-color) !important;
+}
+
+/* Tabs en modo claro */
+.nav-tabs .nav-link {
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--accent-color);
+    border-color: transparent transparent rgba(212, 175, 55, 0.2);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--accent-color) !important;
+    background: #ffffff !important;
+    border-color: rgba(212, 175, 55, 0.3) rgba(212, 175, 55, 0.3) #ffffff !important;
+    font-weight: 700;
+}
+
+/* Botón de mostrar contraseña */
+.input-group .btn {
+    border: 2px solid rgba(212, 175, 55, 0.2) !important;
+    transition: all 0.3s ease !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: var(--text-primary) !important;
+}
+
+.input-group .btn:hover {
+    border-color: var(--accent-color) !important;
+    background: rgba(212, 175, 55, 0.1) !important;
+    color: var(--accent-color) !important;
+}
+
+/* Text muted en modo claro */
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+small.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Separadores (hr) en modo claro */
+hr {
+    border-color: rgba(212, 175, 55, 0.2);
+    opacity: 1;
+}
+
+/* Botón principal del modal */
+.modal-body .btn-lg {
+    padding: 14px 30px !important;
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.modal-body .btn-lg:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: var(--shadow-lg) !important;
+    filter: brightness(1.1) !important;
+}
+
+.modal-body .btn-lg:active {
+    transform: translateY(0) !important;
+}
+
+/* Alertas del modal */
+.modal-body .alert {
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 15px 20px !important;
+    font-weight: 500 !important;
+}
+
+.modal-body .alert-danger {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%) !important;
+    border: 1px solid rgba(220, 53, 69, 0.2) !important;
+    color: #dc3545 !important;
+}
+
+/* Información adicional del modal */
+.modal-body .p-3.rounded-3 {
+    backdrop-filter: blur(10px) !important;
+}
+
+.modal-body hr {
+    border: none !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, transparent 0%, var(--gold-color) 50%, transparent 100%) !important;
+    margin: 20px 0 !important;
+}
+
+/* Responsive para el modal */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 10px !important;
+    }
+
+    .modal-header,
+    .modal-body {
+        padding: 20px !important;
+    }
+
+    .modal-header .modal-title {
+        font-size: 1.2rem !important;
+    }
+}
+
+/* ====================================
+   BOTÓN MODO OSCURO - MEJORADO
+   ==================================== */
+#darkModeBtn {
+    position: relative;
+    padding: 10px 18px;
+    border: 2px solid #2d1b12 !important;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d4af37 0%, #b8941f 100%) !important;
+    color: #1a0e09 !important;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+
+#darkModeBtn:hover {
+    background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%) !important;
+    border-color: #1a0e09 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.5);
+    color: #1a0e09 !important;
+}
+
+#darkModeBtn span {
+    color: #1a0e09 !important;
+    font-weight: 700;
+}
+
+#darkModeBtn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+    color: #1a0e09 !important;
+}
+
+#darkModeBtn:hover i {
+    transform: rotate(20deg);
+    color: #1a0e09 !important;
+}
+
+.dark-mode #darkModeBtn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    border-color: #1e40af !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+}
+
+.dark-mode #darkModeBtn:hover {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.6);
+    color: #ffffff !important;
+}
+
+.dark-mode #darkModeBtn span {
+    color: #ffffff !important;
+}
+
+.dark-mode #darkModeBtn i {
+    color: #ffffff !important;
+}
+
+.dark-mode #darkModeBtn:hover i {
+    color: #ffffff !important;
+}
+
+/* ====================================
+   MEJORAS ADICIONALES MODO OSCURO
+   ==================================== */
+
+/* Iconos y badges en modo oscuro */
+.dark-mode .bi-check-circle-fill.text-success {
+    color: #10b981 !important;
+}
+
+.dark-mode .badge {
+    border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+/* Botones en modales - modo oscuro */
+.dark-mode .btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4) !important;
+}
+
+.dark-mode .btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .btn-success:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+.dark-mode .btn-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    border: none !important;
+    color: #1a0e09 !important;
+    font-weight: 600;
+}
+
+.dark-mode .btn-warning:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Mejorar legibilidad de credenciales de prueba */
+.dark-mode .modal-body .p-2.rounded-3,
+.dark-mode .modal-body .mt-3.p-2.rounded-3 {
+    background: rgba(59, 130, 246, 0.15) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.dark-mode .modal-body strong {
+    color: #60a5fa !important;
+}
+
+/* Select y textarea en modo oscuro */
+.dark-mode select,
+.dark-mode textarea {
+    background: #ffffff !important;
+    border-color: #cccccc !important;
+    color: #000000 !important;
+}
+
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+    background: #ffffff !important;
+    border-color: #60a5fa !important;
+    color: #000000 !important;
+    box-shadow: 0 0 0 0.2rem rgba(96, 165, 250, 0.25) !important;
+}
+
+/* Opciones de select en modo oscuro */
+.dark-mode select option {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* Mejorar contraste de iconos en headers de modales */
+.modal-header .modal-title i {
+    opacity: 0.95;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Asegurar que los row y col-md mantengan buen contraste */
+.dark-mode .row .col-md-6 .form-label,
+.dark-mode .row .col-md-6 .form-control {
+    color: #000000 !important;
+}
+
+/* Iconos en labels - modo oscuro */
+.dark-mode .form-label i {
+    color: #000000 !important;
+}
+
+/* OVERRIDE TOTAL PARA MODALES EN MODO OSCURO - SELECTORES ESPECÍFICOS */
+body.dark-mode #ModalProfesor .modal-content,
+body.dark-mode #ModalCliente .modal-content {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+body.dark-mode #ModalProfesor .modal-body,
+body.dark-mode #ModalCliente .modal-body {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+body.dark-mode #ModalProfesor .form-label,
+body.dark-mode #ModalCliente .form-label {
+    color: #000000 !important;
+}
+
+body.dark-mode #ModalProfesor .form-control,
+body.dark-mode #ModalCliente .form-control {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #cccccc !important;
+}
+
+body.dark-mode #ModalProfesor .input-group .btn,
+body.dark-mode #ModalCliente .input-group .btn {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #cccccc !important;
+}
+
+/* Sobrescribir el placeholder en modo oscuro */
+body.dark-mode #ModalProfesor .form-control::placeholder,
+body.dark-mode #ModalCliente .form-control::placeholder {
+    color: #666666 !important;
+    opacity: 1 !important;
+}
+
+/* Sobrescribir texto small y muted */
+body.dark-mode #ModalProfesor small,
+body.dark-mode #ModalCliente small {
+    color: #333333 !important;
+}
+
+body.dark-mode #ModalProfesor .text-muted,
+body.dark-mode #ModalCliente .text-muted {
+    color: #333333 !important;
+}
+
+/* Sobrescribir hr */
+body.dark-mode #ModalProfesor hr,
+body.dark-mode #ModalCliente hr {
+    border-color: #cccccc !important;
+}
+
+/* Tabs específicos */
+body.dark-mode #ModalCliente .nav-tabs {
+    border-bottom-color: #cccccc !important;
+}
+
+body.dark-mode #ModalCliente .nav-tabs .nav-link {
+    color: #333333 !important;
+}
+
+body.dark-mode #ModalCliente .nav-tabs .nav-link.active {
+    color: #000000 !important;
+    background: #ffffff !important;
+    border-color: #cccccc #cccccc #ffffff !important;
+}
+
+/* Mejorar visibilidad de los placeholders en ambos modos */
+.form-control::placeholder {
+    opacity: 0.6;
+}
+
+.dark-mode .form-control::placeholder {
+    opacity: 0.5;
+}
+
+/* ================================
+   ESTILOS PARA SWEETALERT MODALS
+   ================================ */
+
+/* Inputs dentro de modales SweetAlert */
+.swal2-html-container .form-control,
+.swal2-popup .form-control {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid rgba(212, 175, 55, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 10px 12px !important;
+    font-size: 1rem !important;
+    caret-color: #000000 !important;
+}
+
+.swal2-html-container .form-control:focus,
+.swal2-popup .form-control:focus {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2) !important;
+    outline: none !important;
+    caret-color: #000000 !important;
+}
+
+.swal2-html-container .form-control::placeholder,
+.swal2-popup .form-control::placeholder {
+    color: #999999 !important;
+    opacity: 1 !important;
+}
+
+/* Asegurar que el texto digitado sea visible en inputs */
+.swal2-html-container input[type="date"],
+.swal2-html-container input[type="time"],
+.swal2-html-container input[type="number"],
+.swal2-html-container input[type="text"],
+.swal2-popup input[type="date"],
+.swal2-popup input[type="time"],
+.swal2-popup input[type="number"],
+.swal2-popup input[type="text"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    caret-color: #000000 !important;
+}
+
+.swal2-html-container input[type="date"]::selection,
+.swal2-html-container input[type="time"]::selection,
+.swal2-html-container input[type="number"]::selection,
+.swal2-html-container input[type="text"]::selection,
+.swal2-popup input[type="date"]::selection,
+.swal2-popup input[type="time"]::selection,
+.swal2-popup input[type="number"]::selection,
+.swal2-popup input[type="text"]::selection {
+    background-color: #d4af37 !important;
+    color: #000000 !important;
+}
+
+/* Labels dentro de SweetAlert */
+.swal2-html-container .form-label,
+.swal2-popup .form-label {
+    color: #2d1b12 !important;
+    font-weight: 600 !important;
+    margin-bottom: 6px !important;
+}
+
+/* Forzar color en partes internas de inputs date/time en WebKit */
+.swal2-html-container input[type="date"]::-webkit-datetime-edit,
+.swal2-html-container input[type="time"]::-webkit-datetime-edit,
+.swal2-html-container input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+.swal2-html-container input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+.swal2-popup input[type="date"]::-webkit-datetime-edit,
+.swal2-popup input[type="time"]::-webkit-datetime-edit,
+.swal2-popup input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+.swal2-popup input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+.swal2-html-container input[type="date"]::-webkit-datetime-edit-text,
+.swal2-html-container input[type="time"]::-webkit-datetime-edit-text,
+.swal2-popup input[type="date"]::-webkit-datetime-edit-text,
+.swal2-popup input[type="time"]::-webkit-datetime-edit-text {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+}
+
+/* Forzar color en inputs numéricos y texto dentro de SweetAlert para todos los navegadores */
+.swal2-html-container input,
+.swal2-popup input {
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+}
+
+/* Small text dentro de SweetAlert */
+.swal2-html-container small,
+.swal2-popup small {
+    color: #2d1b12 !important;
+}
+
+/* Text-muted en SweetAlert */
+.swal2-html-container .text-muted,
+.swal2-popup .text-muted {
+    color: #5d4e37 !important;
+}
+
+/* Alertas dentro de SweetAlert */
+.swal2-html-container .alert,
+.swal2-popup .alert {
+    color: #000000 !important;
+}
+
+.swal2-html-container .alert-info,
+.swal2-popup .alert-info {
+    background: #e7f3ff !important;
+    border-color: #b3d9ff !important;
+    color: #004085 !important;
+}
+
+.swal2-html-container .alert-success,
+.swal2-popup .alert-success {
+    background: #d4edda !important;
+    border-color: #c3e6cb !important;
+    color: #155724 !important;
+}
+
+.swal2-html-container .alert-warning,
+.swal2-popup .alert-warning {
+    background: #fff3cd !important;
+    border-color: #ffeaa7 !important;
+    color: #856404 !important;
+}
+
+/* Textos fuertes en SweetAlert */
+.swal2-html-container strong,
+.swal2-popup strong {
+    color: #2d1b12 !important;
+    font-weight: 700 !important;
+}
+
+/* Forzar estilos cuando el body usa modo oscuro */
+body.dark-mode .swal2-html-container .form-control,
+body.dark-mode .swal2-popup .form-control,
+body.dark-mode .swal2-html-container input,
+body.dark-mode .swal2-popup input {
+    background: #ffffff !important;
+    color: #000000 !important;
+    -webkit-text-fill-color: #000000 !important;
+}
+
+/* Estilos para checkboxes dentro de SweetAlert */
+.swal2-html-container .form-check-input,
+.swal2-popup .form-check-input,
+.swal2-html-container .zona-checkbox,
+.swal2-popup .zona-checkbox {
+    accent-color: #d4af37 !important;
+    background-color: #ffffff !important;
+    border: 2px solid rgba(45, 27, 18, 0.1) !important;
+}
+
+.swal2-html-container .form-check-input:checked,
+.swal2-popup .form-check-input:checked,
+.swal2-html-container .zona-checkbox:checked,
+.swal2-popup .zona-checkbox:checked {
+    background-color: #d4af37 !important;
+    border-color: #d4af37 !important;
+}
+
+/* In case Bootstrap uses background-image for checkbox check, ensure contrast */
+.swal2-html-container .form-check-input:checked::after,
+.swal2-popup .form-check-input:checked::after,
+.swal2-html-container .zona-checkbox:checked::after,
+.swal2-popup .zona-checkbox:checked::after {
+    color: #000000 !important;
+}
+
+/* Force native checkbox appearance and remove custom background-images that hide the check */
+.swal2-html-container .form-check-input,
+.swal2-popup .form-check-input,
+.swal2-html-container .zona-checkbox,
+.swal2-popup .zona-checkbox {
+    -webkit-appearance: checkbox !important;
+    appearance: checkbox !important;
+    background-image: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+.swal2-html-container .form-check-input:checked,
+.swal2-popup .form-check-input:checked,
+.swal2-html-container .zona-checkbox:checked,
+.swal2-popup .zona-checkbox:checked {
+    background-image: none !important;
+}
+
+/* If label is used as sibling, ensure checkbox is visible and label has space */
+.swal2-html-container .form-check-label,
+.swal2-popup .form-check-label {
+    position: relative;
+    padding-left: 38px !important;
+}
+
+.swal2-html-container .form-check-input,
+.swal2-popup .form-check-input,
+.swal2-html-container .zona-checkbox,
+.swal2-popup .zona-checkbox {
+    width: 20px !important;
+    height: 20px !important;
+    margin-left: 0 !important;
+    margin-top: -2px !important;
+}
+
+/* Reemplazo visual de checkbox: ocultar input nativo y mostrar caja personalizada */
+.swal2-html-container .zona-check-item,
+.swal2-popup .zona-check-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.swal2-html-container .zona-checkbox,
+.swal2-popup .zona-checkbox {
+    position: absolute !important;
+    left: 12px !important;
+    opacity: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    pointer-events: auto !important;
+}
+
+.swal2-html-container .zona-check-item .form-check-label,
+.swal2-popup .zona-check-item .form-check-label {
+    position: relative;
+    padding-left: 44px !important;
+    cursor: pointer;
+}
+
+.swal2-html-container .zona-check-item .form-check-label::before,
+.swal2-popup .zona-check-item .form-check-label::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(180, 180, 180, 0.8);
+    border-radius: 6px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+/* Marca visible cuando está seleccionado */
+.swal2-html-container .zona-checkbox:checked+.form-check-label::before,
+.swal2-popup .zona-checkbox:checked+.form-check-label::before {
+    background: #d4af37;
+    border-color: #d4af37;
+}
+
+.swal2-html-container .zona-checkbox:checked+.form-check-label::after,
+.swal2-popup .zona-checkbox:checked+.form-check-label::after {
+    content: '✓';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    font-weight: 700;
+    color: #000000;
+}
+
+/* Universal fallback: handle any checkbox inside SweetAlert popup */
+.swal2-popup input[type="checkbox"],
+.swal2-html-container input[type="checkbox"] {
+    position: absolute !important;
+    left: 12px !important;
+    opacity: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.swal2-popup input[type="checkbox"] + label::before,
+.swal2-html-container input[type="checkbox"] + label::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(180,180,180,0.8);
+    border-radius: 6px;
+    background: #ffffff;
+    box-sizing: border-box;
+}
+
+.swal2-popup input[type="checkbox"]:checked + label::before,
+.swal2-html-container input[type="checkbox"]:checked + label::before {
+    background: #d4af37;
+    border-color: #d4af37;
+}
+
+.swal2-popup input[type="checkbox"]:checked + label::after,
+.swal2-html-container input[type="checkbox"]:checked + label::after {
+    content: '✓';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    font-weight: 700;
+    color: #000000;
+}
+
+/* CACHE BUSTER 1762917976 */

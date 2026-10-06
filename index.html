@@ -1,0 +1,3440 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Salon de Lumière - Sistema de Reservas y Gestión</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="public/bootstrap/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="public/css/style.css">
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Estilos para el navbar */
+        #mainNavbar {
+            background: #3d2e24 !important;
+            box-shadow: none !important;
+            border-bottom: none !important;
+            transition: all 0.3s ease !important;
+            padding: 0.5rem 0 !important;
+        }
+
+        #mainNavbar .nav-link {
+            color: #f5f2ed !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.75rem 1rem !important;
+        }
+
+        #mainNavbar .nav-link:hover {
+            color: #d4af37 !important;
+        }
+
+        /* Estilos responsive para móvil */
+        @media (max-width: 991px) {
+            #mainNavbar .navbar-collapse {
+                background: rgba(61, 46, 36, 0.98);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                padding: 20px;
+                border-radius: 15px;
+                margin-top: 15px;
+                border: 1px solid rgba(212, 175, 55, 0.3);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            }
+
+            #mainNavbar .nav-link {
+                padding: 10px 15px !important;
+                border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            }
+
+            #mainNavbar .nav-link:last-child {
+                border-bottom: none;
+            }
+
+            /* Ajustar tamaño de botones en móvil */
+            .navbar-buttons .btn {
+                padding: 10px 20px !important;
+                font-size: 0.9rem !important;
+                width: 100% !important;
+            }
+
+            /* Modo oscuro responsive - sin bordes amarillos */
+            .dark-mode #mainNavbar .navbar-collapse {
+                background: rgba(0, 0, 0, 0.98) !important;
+                border: none !important;
+            }
+
+            .dark-mode #mainNavbar .nav-link {
+                border-bottom: none !important;
+            }
+        }
+
+        /* Estilos para el navbar en modo oscuro */
+        .dark-mode #mainNavbar {
+            background: #000000 !important;
+            box-shadow: none !important;
+            border-bottom: none !important;
+            border: none !important;
+        }
+
+        .dark-mode #mainNavbar .nav-link {
+            color: #c9a04c !important;
+        }
+
+        .dark-mode #mainNavbar .nav-link:hover {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode #mainNavbar .navbar-collapse {
+            background: rgba(0, 0, 0, 0.98) !important;
+            border: none !important;
+        }
+
+        /* Estilos para los botones en modo oscuro - tonos cafecito/marrón oscuro */
+        .dark-mode #darkModeBtn {
+            background: #4a3529 !important;
+            color: #f5f2ed !important;
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .dark-mode #darkModeBtn:hover {
+            background: #3d2e24 !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .dark-mode #btn-ingresar {
+            background: #4a3529 !important;
+            color: #f5f2ed !important;
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .dark-mode #btn-ingresar:hover {
+            background: #3d2e24 !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* Estilos para modo oscuro del modal de selección de perfil */
+        .dark-mode #ModalSeleccionPerfil .modal-content {
+            background: #1a1410 !important;
+        }
+
+        .dark-mode #ModalSeleccionPerfil .btn-close {
+            filter: brightness(2.5) !important;
+        }
+
+        /* Estilos para modo oscuro en la sección de mesas */
+        .dark-mode .mesas-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%) !important;
+        }
+
+        .dark-mode .mesas-title {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .mesas-subtitle {
+            color: #c9b896 !important;
+        }
+
+        .dark-mode .stat-card-disponible {
+            background: linear-gradient(135deg, #1e5128 0%, #2d6a3e 100%) !important;
+        }
+
+        .dark-mode .stat-card-ocupada {
+            background: linear-gradient(135deg, #7a1e1e 0%, #9a2828 100%) !important;
+        }
+
+        .dark-mode .stat-card-reservada {
+            background: linear-gradient(135deg, #8b6914 0%, #b8941f 100%) !important;
+        }
+
+        .dark-mode .stat-card-ocupacion {
+            background: linear-gradient(135deg, #4a2c7a 0%, #5e3890 100%) !important;
+        }
+
+        .dark-mode .mesas-leyenda {
+            background: rgba(26, 26, 26, 0.98) !important;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2) !important;
+        }
+
+        .dark-mode .leyenda-text {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .mesas-zona-card {
+            background: rgba(20, 20, 20, 0.98) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+            border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        }
+
+        .dark-mode .zona-card h3 {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .zona-card .text-muted {
+            color: #c9b896 !important;
+        }
+
+        /* Estilos para la sección de selección de usuario en modo oscuro */
+        .dark-mode .selection-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%) !important;
+        }
+
+        .dark-mode .section-title {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .user-card {
+            background: rgba(20, 20, 20, 0.98) !important;
+            border: 1px solid rgba(212, 175, 55, 0.3) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+        }
+
+        .dark-mode .user-card:hover {
+            border-color: rgba(212, 175, 55, 0.6) !important;
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2) !important;
+        }
+
+        .dark-mode .user-title {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .user-description {
+            color: #c9b896 !important;
+        }
+
+        .dark-mode .user-card .text-muted {
+            color: #a89968 !important;
+        }
+
+        /* Dark Mode para Sección de Espacios */
+        .dark-mode .espacios-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%) !important;
+        }
+
+        .dark-mode .espacios-title {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .espacios-container {
+            background: #000000 !important;
+            border-color: #d4af37 !important;
+        }
+
+        .dark-mode .espacio-card-divider {
+            border-left-color: #d4af37 !important;
+            border-right-color: #d4af37 !important;
+        }
+
+        .dark-mode .espacio-card h4 {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .espacio-descripcion {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        .dark-mode .btn-espacio {
+            background: #1a1a1a !important;
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .btn-espacio:hover {
+            background: #2d2d2d !important;
+        }
+
+        /* Dark Mode para Galería de Mesas */
+        .dark-mode .mesa-card {
+            background: #1a1a1a !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+        }
+
+        .dark-mode .mesa-card:hover {
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4) !important;
+        }
+
+        .dark-mode .mesa-card-body {
+            background: #1a1a1a !important;
+        }
+
+        .dark-mode .mesa-capacidad-label,
+        .dark-mode .mesa-ubicacion-label {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .mesa-capacidad,
+        .dark-mode .mesa-ubicacion {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .dark-mode .mesa-precio-box {
+            background: #d4af37 !important;
+        }
+
+        .dark-mode .mesa-consumo-text {
+            color: #5a4a3a !important;
+        }
+
+        .dark-mode .mesas-leyenda {
+            background: rgba(20, 20, 20, 0.9) !important;
+            border-color: rgba(212, 175, 55, 0.3) !important;
+        }
+
+        .dark-mode .leyenda-text {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        /* Dark Mode para Sección de Menú */
+        .dark-mode .menu-section {
+            background: #1a1410 !important;
+        }
+
+        .dark-mode .menu-title {
+            color: #d4af37 !important;
+            font-size: 3rem !important;
+        }
+
+        .dark-mode .menu-subtitle {
+            color: #a8896d !important;
+            font-size: 1.2rem !important;
+        }
+
+        .dark-mode .categoria-card {
+            background: #2d2420 !important;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6) !important;
+        }
+
+        .dark-mode .categoria-card:hover {
+            transform: translateY(-12px) !important;
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.4) !important;
+        }
+
+        .dark-mode .categoria-card>div:first-child {
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%) !important;
+        }
+
+        .dark-mode .categoria-card>div:last-child {
+            background: #2d2420 !important;
+        }
+
+        .dark-mode .categoria-nombre {
+            color: #d4af37 !important;
+        }
+
+        .dark-mode .categoria-count {
+            color: #c9a04c !important;
+        }
+
+        .dark-mode .spinner-border {
+            color: #d4af37 !important;
+        }
+
+        /* Validación de campos en tiempo real */
+        .form-control.is-invalid {
+            border-color: #dc3545 !important;
+            animation: shake 0.3s ease-in-out;
+            background-color: rgba(220, 53, 69, 0.1) !important;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* Indicador visual para campos válidos */
+        .form-control.is-valid {
+            border-color: #28a745 !important;
+            background-color: rgba(40, 167, 69, 0.05) !important;
+        }
+
+        /* Estilos para Sobre Nosotros en modo oscuro */
+        .dark-mode .sobre-nosotros-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%) !important;
+        }
+
+        .dark-mode .sobre-nosotros-section .section-title,
+        .dark-mode .sobre-nosotros-section h3 {
+            color: var(--gold-color) !important;
+        }
+
+        .dark-mode .sobre-nosotros-section .text-muted,
+        .dark-mode .sobre-nosotros-section p {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .dark-mode .sobre-nosotros-section .feature-box {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%) !important;
+            border-color: rgba(212, 175, 55, 0.3) !important;
+        }
+
+        .dark-mode .sobre-nosotros-section .feature-box h5 {
+            color: var(--gold-color) !important;
+        }
+
+        .dark-mode .sobre-nosotros-section .feature-box p {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+                /* Estilos para el filtro de precio */
+        #filtroPrecio {
+            transition: all 0.3s ease;
+        }
+
+        #filtroPrecio:focus {
+            border-color: #d4af37;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            outline: none;
+        }
+
+        .dark-mode #filtroPrecio {
+            background: #1a1a1a !important;
+            color: white !important;
+            border-color: #d4af37 !important;
+        }
+
+        .dark-mode #filtroPrecio option {
+            background: #1a1a1a;
+            color: #d4af37;
+        }
+
+        .dark-mode label[for="filtroPrecio"] ,.dark-mode label[for="filtroPrecio"] i{
+            color: #d4af37 !important;
+        }
+        .dark-mode p strong{
+            color: #d4af37 !important;
+        }
+       
+        /* Modales mantienen su diseño original en modo oscuro */
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top border-0" id="mainNavbar"
+        style="border: none !important; border-bottom: none !important;">
+        <div class="container">
+            <a class="navbar-brand" href="#" style="display: flex; align-items: center;">
+                <img src="utils/imagen/LOGO1-HEADER.png" alt="Lumière"
+                    style="height: 55px; width: auto; filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                style="border-color: #d4af37;">
+                <span class="navbar-toggler-icon" style="filter: brightness(0) invert(1);"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#inicio">
+                            <i class="bi bi-house"></i> Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#nosotros">
+                            <i class="bi bi-heart"></i> Nosotros
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#menu">
+                            <i class="bi bi-book"></i> Menú
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#espacios">
+                            <i class="bi bi-building"></i> Espacios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#mesas">
+                            <i class="bi bi-diagram-3"></i> Mesas
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Botones de la derecha -->
+                <div class="d-flex align-items-center flex-column flex-lg-row mt-3 mt-lg-0 gap-2">
+                    <!-- Botón Modo Oscuro -->
+                    <button id="darkModeBtn" class="btn border-0 shadow-sm w-100 w-lg-auto"
+                        style="background: #c9a04c !important; color: #2d1b12 !important; font-weight: 600 !important; transition: all 0.3s ease !important; text-shadow: 0 1px 2px rgba(0,0,0,0.1) !important; padding: 8px 20px !important; font-size: 0.95rem !important; border-radius: 8px !important;"
+                        title="Cambiar modo">
+                        <i class="bi bi-moon-fill" id="darkModeIcon"></i>
+                        <span id="darkModeText" class="ms-1">Modo Oscuro</span>
+                    </button>
+
+                    <!-- Botón de Ingresar -->
+                    <button class="btn border-0 shadow-sm w-100 w-lg-auto" id="btn-ingresar"
+                        style="background: #c9a04c !important; color: #2d1b12 !important; font-weight: 600 !important; transition: all 0.3s ease !important; text-shadow: 0 1px 2px rgba(0,0,0,0.1) !important; padding: 8px 20px !important; font-size: 0.95rem !important; border-radius: 8px !important;">
+                        <i class="bi bi-box-arrow-in-right me-2" style="font-size: 1rem;"></i>
+                        <span>INGRESAR</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <br>
+
+    <!-- Header Principal -->
+    <header class="main-header" id="inicio"
+        style="background: linear-gradient(135deg, rgba(45, 27, 18, 0.95) 0%, rgba(61, 46, 36, 0.95) 100%), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80'); background-size: cover; background-position: center; background-attachment: fixed; position: relative;">
+        <div
+            style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);">
+        </div>
+        <div class="container" style="position: relative; z-index: 1;">
+            <div class="logo-container fade-in-up" style="text-align: center; padding: 80px 0 100px 0;">
+                <img src="utils/imagen/LOGO1-HEADER.png" alt="Lumière Café"
+                    style="max-width: 500px; width: 100%; height: auto; margin-bottom: 30px; filter: drop-shadow(0 15px 40px rgba(212, 175, 55, 0.5));">
+                <h1
+                    style="font-size: 2rem; font-weight: 700; color: #f5f2ed; margin-bottom: 15px; font-family: 'Playfair Display', serif; letter-spacing: 2px; text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);">
+                    Café Restaurant
+                </h1>
+                <p
+                    style="font-size: 1.1rem; color: #d4af37; font-weight: 400; font-style: italic; margin-bottom: 0; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);">
+                    Experiencia gastronómica única
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección Sobre Nosotros -->
+    <section class="sobre-nosotros-section py-5" id="nosotros"
+        style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); transition: background 0.3s ease;">
+        <div class="container">
+            <div class="text-center mb-5 fade-in-up">
+                <h2 class="section-title" style="color: var(--primary-color); font-size: 2.5rem; font-weight: 700;">
+                    <i class="bi bi-heart-fill me-2" style="color: var(--gold-color);"></i>
+                    Sobre Nosotros
+                </h2>
+                <p class="text-muted" style="font-size: 1.1rem;">
+                    15 años de pasión por la excelencia gastronómica
+                </p>
+            </div>
+
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <!-- Carrusel de Imágenes -->
+                    <div id="carouselNosotros" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselNosotros" data-bs-slide-to="0"
+                                class="active"></button>
+                            <button type="button" data-bs-target="#carouselNosotros" data-bs-slide-to="1"></button>
+                            <button type="button" data-bs-target="#carouselNosotros" data-bs-slide-to="2"></button>
+                            <button type="button" data-bs-target="#carouselNosotros" data-bs-slide-to="3"></button>
+                        </div>
+                        <div class="carousel-inner"
+                            style="border-radius: 20px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.2);">
+                            <div class="carousel-item active">
+                                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80"
+                                    class="d-block w-100" alt="Interior del Restaurante"
+                                    style="height: 500px; object-fit: cover;">
+                                <div class="carousel-caption d-none d-md-block"
+                                    style="background: rgba(45, 27, 18, 0.7); padding: 15px; border-radius: 10px;">
+                                    <h5 style="color: #d4af37; font-weight: 600;">Ambiente Acogedor</h5>
+                                    <p>Un espacio diseñado para tu comodidad</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80"
+                                    class="d-block w-100" alt="Platos Gourmet"
+                                    style="height: 500px; object-fit: cover;">
+                                <div class="carousel-caption d-none d-md-block"
+                                    style="background: rgba(45, 27, 18, 0.7); padding: 15px; border-radius: 10px;">
+                                    <h5 style="color: #d4af37; font-weight: 600;">Gastronomía de Excelencia</h5>
+                                    <p>Cada plato es una obra de arte culinaria</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80"
+                                    class="d-block w-100" alt="Chef Preparando"
+                                    style="height: 500px; object-fit: cover;">
+                                <div class="carousel-caption d-none d-md-block"
+                                    style="background: rgba(45, 27, 18, 0.7); padding: 15px; border-radius: 10px;">
+                                    <h5 style="color: #d4af37; font-weight: 600;">Maestros de la Cocina</h5>
+                                    <p>Chefs con pasión y dedicación</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=800&q=80"
+                                    class="d-block w-100" alt="Celebraciones" style="height: 500px; object-fit: cover;">
+                                <div class="carousel-caption d-none d-md-block"
+                                    style="background: rgba(45, 27, 18, 0.7); padding: 15px; border-radius: 10px;">
+                                    <h5 style="color: #d4af37; font-weight: 600;">Momentos Especiales</h5>
+                                    <p>El escenario perfecto para tus celebraciones</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselNosotros"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselNosotros"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="nosotros-content" style="padding: 20px;">
+                        <h3
+                            style="color: var(--primary-color); font-size: 2rem; font-weight: 700; margin-bottom: 20px;">
+                            Nuestra Historia
+                            <div style="width: 80px; height: 3px; background: var(--gold-color); margin-top: 10px;">
+                            </div>
+                        </h3>
+                        <p
+                            style="color: #666; font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-align: justify;">
+                            Desde hace <strong>15 años</strong>, Le Salon de Lumière se ha consolidado como un referente
+                            en la excelencia gastronómica.
+                            Nuestro compromiso inquebrantable es ofrecer una experiencia culinaria que trascienda lo
+                            ordinario, fusionando la
+                            tradición con la innovación en cada uno de nuestros platos.
+                        </p>
+                        <p
+                            style="color: #666; font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-align: justify;">
+                            Cada receta es cuidadosamente elaborada por nuestros chefs, quienes seleccionan los
+                            ingredientes más frescos
+                            y de la más alta calidad. Nuestra pasión por la gastronomía nos impulsa a buscar
+                            constantemente la perfección
+                            en cada detalle, desde la presentación hasta el sabor.
+                        </p>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6 mb-4">
+                                <div class="feature-box text-center"
+                                    style="padding: 30px 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border: 2px solid rgba(212, 175, 55, 0.2); height: 100%;"
+                                    onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 35px rgba(212, 175, 55, 0.3)'; this.style.borderColor='rgba(212, 175, 55, 0.5)'"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(0, 0, 0, 0.1)'; this.style.borderColor='rgba(212, 175, 55, 0.2)'">
+                                    <div
+                                        style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);">
+                                        <i class="bi bi-award-fill" style="font-size: 2.5rem; color: #2d1b12;"></i>
+                                    </div>
+                                    <h5
+                                        style="color: var(--primary-color); margin-bottom: 12px; font-weight: 700; font-size: 1.2rem;">
+                                        15 Años de Experiencia</h5>
+                                    <p style="color: #666; font-size: 0.95rem; margin-bottom: 0; line-height: 1.6;">
+                                        Trayectoria impecable en el sector</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="feature-box text-center"
+                                    style="padding: 30px 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border: 2px solid rgba(212, 175, 55, 0.2); height: 100%;"
+                                    onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 35px rgba(212, 175, 55, 0.3)'; this.style.borderColor='rgba(212, 175, 55, 0.5)'"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(0, 0, 0, 0.1)'; this.style.borderColor='rgba(212, 175, 55, 0.2)'">
+                                    <div
+                                        style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);">
+                                        <i class="bi bi-stars" style="font-size: 2.5rem; color: #2d1b12;"></i>
+                                    </div>
+                                    <h5
+                                        style="color: var(--primary-color); margin-bottom: 12px; font-weight: 700; font-size: 1.2rem;">
+                                        Ingredientes Premium</h5>
+                                    <p style="color: #666; font-size: 0.95rem; margin-bottom: 0; line-height: 1.6;">Solo
+                                        la mejor calidad para ti</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="feature-box text-center"
+                                    style="padding: 30px 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border: 2px solid rgba(212, 175, 55, 0.2); height: 100%;"
+                                    onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 35px rgba(212, 175, 55, 0.3)'; this.style.borderColor='rgba(212, 175, 55, 0.5)'"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(0, 0, 0, 0.1)'; this.style.borderColor='rgba(212, 175, 55, 0.2)'">
+                                    <div
+                                        style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);">
+                                        <i class="bi bi-people-fill" style="font-size: 2.5rem; color: #2d1b12;"></i>
+                                    </div>
+                                    <h5
+                                        style="color: var(--primary-color); margin-bottom: 12px; font-weight: 700; font-size: 1.2rem;">
+                                        Equipo Profesional</h5>
+                                    <p style="color: #666; font-size: 0.95rem; margin-bottom: 0; line-height: 1.6;">
+                                        Chefs y staff altamente capacitados</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="feature-box text-center"
+                                    style="padding: 30px 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border: 2px solid rgba(212, 175, 55, 0.2); height: 100%;"
+                                    onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 35px rgba(212, 175, 55, 0.3)'; this.style.borderColor='rgba(212, 175, 55, 0.5)'"
+                                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(0, 0, 0, 0.1)'; this.style.borderColor='rgba(212, 175, 55, 0.2)'">
+                                    <div
+                                        style="width: 80px; height: 80px; margin: 0 auto 20px; background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);">
+                                        <i class="bi bi-heart-pulse-fill"
+                                            style="font-size: 2.5rem; color: #2d1b12;"></i>
+                                    </div>
+                                    <h5
+                                        style="color: var(--primary-color); margin-bottom: 12px; font-weight: 700; font-size: 1.2rem;">
+                                        Pasión en Cada Plato</h5>
+                                    <p style="color: #666; font-size: 0.95rem; margin-bottom: 0; line-height: 1.6;">Amor
+                                        por la gastronomía</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Menú -->
+    <section class="menu-section py-5" id="menu"
+        style="background: linear-gradient(135deg, rgba(61, 46, 36, 0.95) 0%, rgba(45, 27, 18, 0.95) 100%), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80'); background-size: cover; background-position: center; background-attachment: fixed; transition: background 0.3s ease; margin-top: -50px; padding-top: 80px !important;">
+        <div class="container">
+            <!-- Card contenedor del menú -->
+            <div
+                style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border-radius: 30px; padding: 50px 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                <div class="text-center mb-5 fade-in-up">
+                    <h2 class="section-title menu-title" style="color: #d4af37; font-size: 3rem; font-weight: 700;">
+                        <i class="bi bi-book me-2" style="color: #d4af37;"></i>
+                        Nuestro Menú
+                    </h2>
+                    <p class="text-muted menu-subtitle" style="font-size: 1.2rem; color: #f5f2ed;">
+                        Descubra nuestra exclusiva selección gastronómica
+                    </p>
+                </div>
+
+                <!-- Categorías en círculos -->
+                <div class="row g-4 justify-content-center" id="menuCategorias">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border" style="color: var(--gold-color); width: 3rem; height: 3rem;"
+                            role="status">
+                            <span class="visually-hidden">Cargando menú...</span>
+                        </div>
+                        <p class="text-muted mt-3">Cargando categorías del menú...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Espacios del Restaurante -->
+    <section class="espacios-section py-5" id="espacios"
+        style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); transition: background 0.3s ease;">
+        <div class="container">
+            <div class="text-center mb-5 fade-in-up">
+                <h2 class="section-title espacios-title"
+                    style="color: var(--primary-color); font-size: 2.5rem; font-weight: 700;">
+                    Nuestros Espacios
+                </h2>
+            </div>
+
+            <!-- Contenedor de tarjetas -->
+            <div class="espacios-container"
+                style="background: white; border: 3px solid #d4af37; border-radius: 30px; padding: 50px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                <div class="row g-4">
+                    <!-- Terraza -->
+                    <div class="col-md-3">
+                        <div class="espacio-card" style="text-align: center;">
+                            <div
+                                style="background: #e8e8e8; height: 180px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80"
+                                    alt="Terraza" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <h4 style="color: #d4af37; font-weight: 700; font-size: 1.3rem; margin-bottom: 10px;">
+                                TERRAZA</h4>
+                            <p class="espacio-descripcion"
+                                style="color: #666; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.4;">
+                                Ambiente al aire libre con vista panorámica. Perfecto para disfrutar del clima y la
+                                naturaleza.
+                            </p>
+                            <button class="btn-espacio"
+                                style="background: #3d2e24; color: #f5f2ed; border: none; border-radius: 25px; padding: 10px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                onmouseover="this.style.background='#2d1b12'"
+                                onmouseout="this.style.background='#3d2e24'" onclick="mostrarInfoTerraza()">
+                                Más información
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Jardín -->
+                    <div class="col-md-3">
+                        <div class="espacio-card-divider"
+                            style="border-left: 2px solid #3d2e24; border-right: 2px solid #3d2e24; padding: 0 20px;">
+                            <div style="text-align: center;">
+                                <div
+                                    style="background: #e8e8e8; height: 180px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                    <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400&q=80"
+                                        alt="Jardín" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <h4 style="color: #d4af37; font-weight: 700; font-size: 1.3rem; margin-bottom: 10px;">
+                                    JARDÍN</h4>
+                                <p class="espacio-descripcion"
+                                    style="color: #666; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.4;">
+                                    Espacio verde rodeado de naturaleza. Ideal para eventos al aire libre y
+                                    celebraciones especiales.
+                                </p>
+                                <button class="btn-espacio"
+                                    style="background: #3d2e24; color: #f5f2ed; border: none; border-radius: 25px; padding: 10px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                    onmouseover="this.style.background='#2d1b12'"
+                                    onmouseout="this.style.background='#3d2e24'" onclick="mostrarInfoJardin()">
+                                    Más información
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salón VIP -->
+                    <div class="col-md-3">
+                        <div class="espacio-card-divider" style="border-right: 2px solid #3d2e24; padding: 0 20px;">
+                            <div style="text-align: center;">
+                                <div
+                                    style="background: #e8e8e8; height: 180px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                    <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=400&q=80"
+                                        alt="Salón VIP" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <h4 style="color: #d4af37; font-weight: 700; font-size: 1.3rem; margin-bottom: 10px;">
+                                    SALÓN VIP</h4>
+                                <p class="espacio-descripcion"
+                                    style="color: #666; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.4;">
+                                    Exclusivo salón privado con servicio premium. Elegancia y privacidad para ocasiones
+                                    especiales.
+                                </p>
+                                <button class="btn-espacio"
+                                    style="background: #3d2e24; color: #f5f2ed; border: none; border-radius: 25px; padding: 10px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                    onmouseover="this.style.background='#2d1b12'"
+                                    onmouseout="this.style.background='#3d2e24'" onclick="mostrarInfoSalonVIP()">
+                                    Más información
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- El Bar -->
+                    <div class="col-md-3">
+                        <div class="espacio-card" style="text-align: center;">
+                            <div
+                                style="background: #e8e8e8; height: 180px; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400&q=80"
+                                    alt="El Bar" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <h4 style="color: #d4af37; font-weight: 700; font-size: 1.3rem; margin-bottom: 10px;">EL BAR
+                            </h4>
+                            <p class="espacio-descripcion"
+                                style="color: #666; font-size: 0.9rem; margin-bottom: 15px; line-height: 1.4;">
+                                Bar moderno con amplia selección de bebidas. Ambiente sofisticado para disfrutar
+                                cócteles artesanales.
+                            </p>
+                            <button class="btn-espacio"
+                                style="background: #3d2e24; color: #f5f2ed; border: none; border-radius: 25px; padding: 10px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                onmouseover="this.style.background='#2d1b12'"
+                                onmouseout="this.style.background='#3d2e24'" onclick="mostrarInfoBar()">
+                                Más información
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Visualización de Mesas -->
+    <section class="mesas-section py-5" id="mesas"
+        style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); transition: background 0.3s ease;">
+        <div class="container">
+            <div class="text-center mb-5 fade-in-up">
+                <h2 class="section-title mesas-title"
+                    style="color: var(--primary-color); font-size: 2.5rem; font-weight: 700;">
+                    <i class="bi bi-diagram-3-fill me-2" style="color: var(--gold-color);"></i>
+                    Nuestras Mesas Disponibles
+                </h2>
+                <p class="text-muted mesas-subtitle" style="font-size: 1.1rem;">
+                    Selecciona la mesa perfecta para tu experiencia gastronómica
+                </p>
+            </div>
+
+            <!-- Información de Horarios -->
+            <div class="text-center mb-4">
+                <div class="d-inline-block"
+                    style="background: rgba(212, 175, 55, 0.1); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.3);">
+                    <small id="infoHorarios" style="color: #666; font-weight: 500; font-size: 0.85rem;">
+                        <i class="bi bi-clock-fill" style="color: var(--gold-color);"></i>
+                        <span class="leyenda-text">Cargando horarios...</span>
+                    </small>
+                </div>
+            </div>
+
+            <!-- Leyenda Minimalista -->
+            <div class="text-center mb-5">
+                <div class="mesas-leyenda d-inline-flex gap-4 flex-wrap justify-content-center"
+                    style="background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); padding: 15px 30px; border-radius: 50px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <div class="d-flex align-items-center">
+                        <span
+                            style="width: 12px; height: 12px; background: var(--gold-color); border-radius: 50%; display: inline-block; margin-right: 8px;"></span>
+                        <span class="leyenda-text"
+                            style="font-weight: 500; color: #666; font-size: 0.9rem;">Disponible</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span
+                            style="width: 12px; height: 12px; background: #999; border-radius: 50%; display: inline-block; margin-right: 8px;"></span>
+                        <span class="leyenda-text" style="font-weight: 500; color: #666; font-size: 0.9rem;">No
+                            Disponible</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtro de Precio -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                        <label for="filtroPrecio" class="form-label mb-0" style=" font-weight: 500;color: #666">
+                            <i class="bi bi-funnel-fill"></i> Filtrar por Precio:
+                        </label>
+                        <select id="filtroPrecio" class="form-select"
+                            style="max-width: 300px; background: #3d2e24; color: #f5f2ed; border: 1px solid #d4af37; border-radius: 25px; padding: 10px 20px;">
+                            <option value="todos">Todas las mesas</option>
+                            <!-- <option value="0-5">$0 - $5</option> -->
+                             <option value="1-6">$1 - $6</option>
+                            <option value="7-12">$7 - $12</option>
+                            <!-- <option value="5-10">$5 - $10</option> -->
+                            <option value="13-20">$13 - $20</option>
+                            <option value="20-">$20 o más</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Grid de Mesas con Imágenes Elegantes -->
+            <div class="row g-4" id="mesasGallery">
+                <!-- Las mesas se cargarán dinámicamente aquí -->
+            </div>
+
+            <!-- Botón para actualizar (moved here temporarily) -->
+            <div class="text-center mt-5" style="display:none;">
+                <div class="col-md-3 col-6 fade-in-up delay-1">
+                    <div class="stat-card stat-card-disponible"
+                        style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 15px; padding: 25px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3); transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='translateY(-5px)'"
+                        onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <h3 id="statDisponibles" style="font-size: 2rem; font-weight: 700; margin: 0;">-</h3>
+                        <p style="margin: 0; opacity: 0.9;">Mesas Disponibles</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 fade-in-up delay-2">
+                    <div class="stat-card stat-card-ocupada"
+                        style="background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%); border-radius: 15px; padding: 25px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3); transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='translateY(-5px)'"
+                        onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">
+                            <i class="bi bi-x-circle-fill"></i>
+                        </div>
+                        <h3 id="statOcupadas" style="font-size: 2rem; font-weight: 700; margin: 0;">-</h3>
+                        <p style="margin: 0; opacity: 0.9;">Mesas Ocupadas</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 fade-in-up delay-3">
+                    <div class="stat-card stat-card-reservada"
+                        style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); border-radius: 15px; padding: 25px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3); transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='translateY(-5px)'"
+                        onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">
+                            <i class="bi bi-calendar-check-fill"></i>
+                        </div>
+                        <h3 id="statReservadas" style="font-size: 2rem; font-weight: 700; margin: 0;">-</h3>
+                        <p style="margin: 0; opacity: 0.9;">Mesas Reservadas</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6 fade-in-up delay-4">
+                    <div class="stat-card stat-card-ocupacion"
+                        style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%); border-radius: 15px; padding: 25px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3); transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='translateY(-5px)'"
+                        onmouseout="this.style.transform='translateY(0)'">
+                        <div style="font-size: 2.5rem; margin-bottom: 10px;">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h3 id="statOcupacion" style="font-size: 2rem; font-weight: 700; margin: 0;">-%</h3>
+                        <p style="margin: 0; opacity: 0.9;">Ocupación</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Las mesas se cargarán dinámicamente aquí (hidden old stats section) -->
+            <div style="display:none;">
+
+                <!-- Layout de Zonas del Restaurante -->
+                <div class="row g-4" id="zonasRestaurante">
+                    <!-- Zona Interior/Salón Principal -->
+                    <div class="col-lg-6 fade-in-up delay-5">
+                        <div class="zona-card mesas-zona-card"
+                            style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden; transition: all 0.3s ease;">
+                            <div
+                                style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%); border-radius: 50%;">
+                            </div>
+                            <div class="zona-header mb-4" style="position: relative; z-index: 1;">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h3
+                                            style="color: var(--primary-color); font-weight: 700; margin: 0; font-size: 1.5rem;">
+                                            <span style="font-size: 2rem; margin-right: 10px;">🏛️</span>
+                                            Salón Principal
+                                        </h3>
+                                        <p class="text-muted mb-0" style="font-size: 0.9rem;">Ambiente elegante y
+                                            acogedor
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mesas-grid" data-zona="interior"
+                                style="display: flex; flex-wrap: wrap; gap: 15px; min-height: 150px; justify-content: center;">
+                                <div class="col-12 text-center py-4">
+                                    <div class="spinner-border" style="color: var(--gold-color);" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Zona Terraza -->
+                    <div class="col-lg-6 fade-in-up delay-6">
+                        <div class="zona-card mesas-zona-card"
+                            style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden; transition: all 0.3s ease;">
+                            <div
+                                style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%); border-radius: 50%;">
+                            </div>
+                            <div class="zona-header mb-4" style="position: relative; z-index: 1;">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h3
+                                            style="color: var(--primary-color); font-weight: 700; margin: 0; font-size: 1.5rem;">
+                                            <span style="font-size: 2rem; margin-right: 10px;">🌿</span>
+                                            Terraza
+                                        </h3>
+                                        <p class="text-muted mb-0" style="font-size: 0.9rem;">Vista panorámica al aire
+                                            libre
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mesas-grid" data-zona="terraza"
+                                style="display: flex; flex-wrap: wrap; gap: 15px; min-height: 150px; justify-content: center;">
+                                <div class="col-12 text-center py-4">
+                                    <div class="spinner-border" style="color: var(--gold-color);" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Zona VIP -->
+                    <div class="col-lg-6 fade-in-up delay-7">
+                        <div class="zona-card mesas-zona-card"
+                            style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden; transition: all 0.3s ease;">
+                            <div
+                                style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%); border-radius: 50%;">
+                            </div>
+                            <div class="zona-header mb-4" style="position: relative; z-index: 1;">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h3
+                                            style="color: var(--primary-color); font-weight: 700; margin: 0; font-size: 1.5rem;">
+                                            <span style="font-size: 2rem; margin-right: 10px;">👑</span>
+                                            Área VIP
+                                        </h3>
+                                        <p class="text-muted mb-0" style="font-size: 0.9rem;">Exclusividad y privacidad
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mesas-grid" data-zona="vip"
+                                style="display: flex; flex-wrap: wrap; gap: 15px; min-height: 150px; justify-content: center;">
+                                <div class="col-12 text-center py-4">
+                                    <div class="spinner-border" style="color: var(--gold-color);" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Zona Bar -->
+                    <div class="col-lg-6 fade-in-up delay-8">
+                        <div class="zona-card mesas-zona-card"
+                            style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; overflow: hidden; transition: all 0.3s ease;">
+                            <div
+                                style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: linear-gradient(135deg, rgba(111, 66, 193, 0.1) 0%, rgba(111, 66, 193, 0.05) 100%); border-radius: 50%;">
+                            </div>
+                            <div class="zona-header mb-4" style="position: relative; z-index: 1;">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h3
+                                            style="color: var(--primary-color); font-weight: 700; margin: 0; font-size: 1.5rem;">
+                                            <span style="font-size: 2rem; margin-right: 10px;">🍸</span>
+                                            Bar & Lounge
+                                        </h3>
+                                        <p class="text-muted mb-0" style="font-size: 0.9rem;">Ambiente relajado y
+                                            sofisticado</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mesas-grid" data-zona="bar"
+                                style="display: flex; flex-wrap: wrap; gap: 15px; min-height: 150px; justify-content: center;">
+                                <div class="col-12 text-center py-4">
+                                    <div class="spinner-border" style="color: var(--gold-color);" role="status"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End hidden section -->
+
+            <!-- Botón para actualizar -->
+            <div class="text-center mt-5">
+                <button id="btnActualizarMesas" class="btn btn-lg px-5"
+                    style="background: var(--gradient-gold); color: var(--primary-color); border: none; border-radius: 50px; font-weight: 600; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4); transition: all 0.3s ease;"
+                    onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <i class="bi bi-arrow-clockwise me-2"></i>
+                    Actualizar Disponibilidad
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Selección de Usuario -->
+    <section class="selection-container" id="reservas"
+        style="padding: 80px 0; background: linear-gradient(135deg, #f8f5f0 0%, #ffffff 100%);">
+        <div class="container">
+            <!-- Título y tarjeta de acceso -->
+            <h2 class="section-title fade-in-up text-center mb-5"
+                style="color: #3d2e24; font-size: 2.5rem; font-weight: 700;">
+                <i class="bi bi-calendar-heart" style="color: #d4af37;"></i>
+                ¿Cómo deseas acceder?
+            </h2>
+
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-6 col-lg-5">
+                    <!-- Tarjeta Cliente/Usuario -->
+                    <div class="card fade-in-up"
+                        style="border: 3px solid #d4af37; border-radius: 20px; box-shadow: 0 10px 30px rgba(61, 46, 36, 0.15); overflow: hidden; transition: all 0.3s ease;"
+                        onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.3)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(61, 46, 36, 0.15)'">
+                        <div class="card-body text-center p-5"
+                            style="background: linear-gradient(135deg, #ffffff 0%, #f8f5f0 100%);">
+                            <div class="mb-4"
+                                style="background: linear-gradient(135deg, #d4af37 0%, #c9a86a 100%); width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);">
+                                <i class="bi bi-person-heart" style="font-size: 3rem; color: white;"></i>
+                            </div>
+                            <h3 style="color: #3d2e24; font-weight: 700; font-size: 1.8rem; margin-bottom: 15px;">
+                                <i class="bi bi-calendar-check" style="color: #d4af37;"></i>
+                                Soy Cliente
+                            </h3>
+                            <p style="color: #666; font-size: 1.05rem; line-height: 1.7; margin-bottom: 25px;">
+                                Reserva tu mesa, consulta nuestro menú exclusivo, realiza pre-pedidos y disfruta de una
+                                experiencia gastronómica única.
+                            </p>
+                            <div class="mb-4 text-start"
+                                style="background: #f5f2ed; padding: 20px; border-radius: 15px; border-left: 4px solid #d4af37;">
+                                <p style="color: #3d2e24; margin-bottom: 10px; font-weight: 500;">
+                                    <i class="bi bi-check-circle-fill" style="color: #d4af37;"></i> Reservar mesas
+                                    disponibles
+                                </p>
+                                <p style="color: #3d2e24; margin-bottom: 10px; font-weight: 500;">
+                                    <i class="bi bi-check-circle-fill" style="color: #d4af37;"></i> Ver menú y precios
+                                </p>
+                                <p style="color: #3d2e24; margin-bottom: 10px; font-weight: 500;">
+                                    <i class="bi bi-check-circle-fill" style="color: #d4af37;"></i> Realizar pre-pedidos
+                                </p>
+                                <p style="color: #3d2e24; margin-bottom: 0; font-weight: 500;">
+                                    <i class="bi bi-check-circle-fill" style="color: #d4af37;"></i> Historial de
+                                    reservas
+                                </p>
+                            </div>
+                            <button id="btn-cliente-login" class="btn btn-lg w-100"
+                                style="background: linear-gradient(135deg, #3d2e24 0%, #4a3529 100%); color: #d4af37; border: 2px solid #d4af37; border-radius: 50px; font-weight: 700; padding: 15px; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(61, 46, 36, 0.3);"
+                                onmouseover="this.style.background='linear-gradient(135deg, #d4af37 0%, #c9a04c 100%)'; this.style.color='#3d2e24'; this.style.transform='scale(1.05)'"
+                                onmouseout="this.style.background='linear-gradient(135deg, #3d2e24 0%, #4a3529 100%)'; this.style.color='#d4af37'; this.style.transform='scale(1)'">
+                                <i class="bi bi-calendar-plus"></i>
+                                Hacer Reserva
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Reserva de Zonas Mejorada -->
+            <div class="text-center mb-5 fade-in-up">
+                <div
+                    style="display: inline-block; background: linear-gradient(135deg, #d4af37 0%, #c9a86a 100%); padding: 8px 25px; border-radius: 50px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);">
+                    <span style="color: white; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px;">✨ EVENTOS
+                        ESPECIALES</span>
+                </div>
+                <h2 style="color: #3d2e24; font-size: 2.8rem; font-weight: 700; margin-bottom: 15px;">
+                    ¡Reserva Espacios Completos!
+                </h2>
+                <p style="color: #666; font-size: 1.15rem; max-width: 700px; margin: 0 auto; line-height: 1.7;">
+                    Organiza celebraciones, eventos corporativos o reuniones especiales en nuestros exclusivos espacios.
+                </p>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <!-- 1 Zona -->
+                <div class="col-md-6 col-lg-3 fade-in-up">
+                    <div style="background: linear-gradient(135deg, #3d2e24 0%, #4a3529 100%); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(61, 46, 36, 0.2); transition: all 0.3s ease; border: 2px solid #d4af37;"
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.4)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(61, 46, 36, 0.2)'">
+                        <div
+                            style="background: rgba(212, 175, 55, 0.15); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid #d4af37;">
+                            <i class="bi bi-building" style="font-size: 2rem; color: #d4af37;"></i>
+                        </div>
+                        <h3 style="color: #d4af37; font-size: 2.5rem; font-weight: 700; margin-bottom: 5px;">$60</h3>
+                        <p style="color: #c9a86a; font-size: 1.1rem; font-weight: 600; margin-bottom: 15px;">1 Zona</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.5;">Ideal para
+                            reuniones íntimas y cenas privadas</p>
+                    </div>
+                </div>
+
+                <!-- 2 Zonas -->
+                <div class="col-md-6 col-lg-3 fade-in-up delay-1">
+                    <div style="background: linear-gradient(135deg, #3d2e24 0%, #4a3529 100%); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(61, 46, 36, 0.2); transition: all 0.3s ease; border: 2px solid #d4af37;"
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.4)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(61, 46, 36, 0.2)'">
+                        <div
+                            style="background: rgba(212, 175, 55, 0.15); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid #d4af37;">
+                            <i class="bi bi-buildings" style="font-size: 2rem; color: #d4af37;"></i>
+                        </div>
+                        <h3 style="color: #d4af37; font-size: 2.5rem; font-weight: 700; margin-bottom: 5px;">$100</h3>
+                        <p style="color: #c9a86a; font-size: 1.1rem; font-weight: 600; margin-bottom: 15px;">2 Zonas</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.5;">Perfecto para
+                            eventos medianos y celebraciones</p>
+                    </div>
+                </div>
+
+                <!-- 3 Zonas -->
+                <div class="col-md-6 col-lg-3 fade-in-up delay-2">
+                    <div style="background: linear-gradient(135deg, #3d2e24 0%, #4a3529 100%); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 10px 30px rgba(61, 46, 36, 0.2); transition: all 0.3s ease; border: 2px solid #d4af37;"
+                        onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.4)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(61, 46, 36, 0.2)'">
+                        <div
+                            style="background: rgba(212, 175, 55, 0.15); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid #d4af37;">
+                            <i class="bi bi-shop" style="font-size: 2rem; color: #d4af37;"></i>
+                        </div>
+                        <h3 style="color: #d4af37; font-size: 2.5rem; font-weight: 700; margin-bottom: 5px;">$120</h3>
+                        <p style="color: #c9a86a; font-size: 1.1rem; font-weight: 600; margin-bottom: 15px;">3 Zonas</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.5;">Excelente para
+                            eventos grandes y bodas</p>
+                    </div>
+                </div>
+
+                <!-- Locación Completa -->
+                <div class="col-md-6 col-lg-3 fade-in-up delay-3">
+                    <div style="background: linear-gradient(135deg, #d4af37 0%, #c9a04c 100%); border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5); transition: all 0.3s ease; border: 3px solid #3d2e24; position: relative; overflow: hidden;"
+                        onmouseover="this.style.transform='translateY(-10px) scale(1.03)'; this.style.boxShadow='0 20px 50px rgba(212, 175, 55, 0.6)'"
+                        onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.5)'">
+                        <div
+                            style="position: absolute; top: 10px; right: 10px; background: #3d2e24; color: #d4af37; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;">
+                            ⭐ POPULAR</div>
+                        <div
+                            style="background: rgba(61, 46, 36, 0.2); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; border: 2px solid #3d2e24;">
+                            <i class="bi bi-stars" style="font-size: 2rem; color: #3d2e24;"></i>
+                        </div>
+                        <h3 style="color: #3d2e24; font-size: 2.8rem; font-weight: 700; margin-bottom: 5px;">$140</h3>
+                        <p style="color: #5a4a3a; font-size: 1.2rem; font-weight: 700; margin-bottom: 15px;">Locación
+                            Completa</p>
+                        <p style="color: #3d2e24; font-size: 0.9rem; font-weight: 600; line-height: 1.5;">¡Todo el
+                            restaurante para tu evento exclusivo!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de Reserva -->
+            <div class="text-center">
+                <button id="btn-reserva-zona-index" class="btn btn-lg px-5"
+                    style="background: linear-gradient(135deg, #3d2e24 0%, #4a3529 100%); color: #d4af37; border: 2px solid #d4af37; border-radius: 50px; font-weight: 700; padding: 15px 50px; font-size: 1.15rem; transition: all 0.3s ease; box-shadow: 0 8px 25px rgba(61, 46, 36, 0.3);"
+                    onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 35px rgba(212, 175, 55, 0.5)'; this.style.background='linear-gradient(135deg, #d4af37 0%, #c9a04c 100%)'; this.style.color='#3d2e24'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(61, 46, 36, 0.3)'; this.style.background='linear-gradient(135deg, #3d2e24 0%, #4a3529 100%)'; this.style.color='#d4af37'">
+                    <i class="bi bi-calendar-event me-2"></i>
+                    Reservar Zona Ahora
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Selección de Perfil - Elegante -->
+    <div class="modal fade" id="ModalSeleccionPerfil" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" id="modalSeleccionContent"
+                style="background: #4a3529 !important; border: none; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);">
+                <!-- Close Button -->
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    style="position: absolute; top: 20px; right: 20px; z-index: 10; opacity: 0.8;"
+                    onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"></button>
+
+                <div class="modal-body text-center" style="padding: 60px 40px;">
+                    <!-- Título Bienvenido -->
+                    <h2
+                        style="font-family: 'Playfair Display', serif; font-style: italic; color: #d4af37; font-size: 3rem; font-weight: 700; margin-bottom: 15px; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);">
+                        Bienvenido
+                    </h2>
+
+                    <!-- Subtítulo -->
+                    <p id="modalSeleccionSubtitle"
+                        style="color: rgba(255, 255, 255, 0.7) !important; font-size: 1.1rem; margin-bottom: 50px; font-weight: 400;">
+                        Selecciona tu perfil para ingresar
+                    </p>
+
+                    <!-- Botones de Selección -->
+                    <div class="d-grid gap-3" style="max-width: 450px; margin: 0 auto;">
+                        <!-- Botón Cliente -->
+                        <button id="btn-open-cliente"
+                            class="btn btn-lg d-flex align-items-center justify-content-between"
+                            style="background: #f5f2ed; border: none; border-radius: 15px; padding: 20px 30px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);"
+                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(212, 175, 55, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.2)'">
+                            <span
+                                style="font-family: 'Playfair Display', serif; font-style: italic; color: #d4af37; font-size: 1.8rem; font-weight: 900; text-align: left;">
+                                Cliente
+                            </span>
+                            <i class="bi bi-arrow-right"
+                                style="color: #d4af37; font-size: 1.5rem; font-weight: bold;"></i>
+                        </button>
+
+                        <!-- Botón Administrador -->
+                        <button id="btn-open-admin" class="btn btn-lg d-flex align-items-center justify-content-between"
+                            style="background: #f5f2ed; border: none; border-radius: 15px; padding: 20px 30px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);"
+                            onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px rgba(212, 175, 55, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0, 0, 0, 0.2)'">
+                            <span
+                                style="font-family: 'Playfair Display', serif; font-style: italic; color: #d4af37; font-size: 1.8rem; font-weight: 900; text-align: left;">
+                                Administrador
+                            </span>
+                            <i class="bi bi-arrow-right"
+                                style="color: #d4af37; font-size: 1.5rem; font-weight: bold;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login Administrador -->
+    <div class="modal fade" id="ModalProfesor" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background: var(--gradient-gold) !important;">
+                    <h5 class="modal-title">
+                        <i class="bi bi-shield-lock-fill me-2"></i>
+                        Acceso de Administrador
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="AdminForm">
+                        <div class="mb-3">
+                            <label for="adminUsuarioModal" class="form-label">
+                                <i class="bi bi-person"></i> Usuario
+                            </label>
+                            <input type="text" class="form-control" id="adminUsuarioModal" required
+                                placeholder="Ingresa tu usuario">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="adminPasswordModal" class="form-label">
+                                <i class="bi bi-lock"></i> Contraseña
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="adminPasswordModal" required
+                                    placeholder="Ingresa tu contraseña">
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordAdmin()">
+                                    <i class="bi bi-eye" id="toggleIconAdmin"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="loginError" class="alert alert-danger d-none" role="alert"></div>
+
+                        <div class="d-grid gap-2">
+                            <button id="btn-admin-modal" class="btn btn-warning" type="button"
+                                style="background: var(--gradient-gold) !important; border: none; color: var(--primary-color); font-weight: 600;">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                Acceder al Panel de Control
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr>
+                    <div class="text-center">
+                        <small class="text-muted">
+                            <i class="bi bi-shield-check"></i>
+                            Panel de Control de Le Salon de Lumière
+                        </small>
+                    </div>
+
+                    <!-- Credenciales de prueba (solo para desarrollo) -->
+                    <div class="mt-3 p-2 rounded-3"
+                        style="background: rgba(13, 202, 240, 0.1); border: 1px solid rgba(13, 202, 240, 0.2);">
+                        <small class="text-info">
+                            <i class="bi bi-info-circle me-1"></i>
+                            <strong>Credenciales de prueba:</strong> admin / password
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Login Cliente -->
+    <div class="modal fade" id="ModalCliente" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background: var(--gradient-secondary) !important;">
+                    <h5 class="modal-title">
+                        <i class="bi bi-person-circle me-2"></i>
+                        Acceso de Cliente
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Tabs para Login/Registro -->
+                    <ul class="nav nav-tabs mb-3" id="clienteTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="login-tab" data-bs-toggle="tab"
+                                data-bs-target="#login-panel" type="button" role="tab">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="registro-tab" data-bs-toggle="tab"
+                                data-bs-target="#registro-panel" type="button" role="tab">
+                                <i class="bi bi-person-plus"></i> Crear Cuenta
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="clienteTabContent">
+                        <!-- Panel de Login -->
+                        <div class="tab-pane fade show active" id="login-panel" role="tabpanel">
+                            <form id="LoginClienteForm">
+                                <div class="mb-3">
+                                    <label for="loginUsuario" class="form-label">
+                                        <i class="bi bi-person"></i> Usuario
+                                    </label>
+                                    <input type="text" class="form-control" id="loginUsuario" required
+                                        placeholder="Ingresa tu usuario">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">
+                                        <i class="bi bi-lock"></i> Contraseña
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="loginPassword" required
+                                            placeholder="Ingresa tu contraseña">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            onclick="togglePasswordCliente('login')">
+                                            <i class="bi bi-eye" id="toggleIconLogin"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="loginErrorCliente" class="alert alert-danger d-none" role="alert">
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button id="btn-login-cliente" class="btn btn-primary" type="button">
+                                        <i class="bi bi-box-arrow-in-right"></i>
+                                        Iniciar Sesión
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Panel de Registro -->
+                        <div class="tab-pane fade" id="registro-panel" role="tabpanel">
+                            <form id="RegistroClienteForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="regNombre" class="form-label">
+                                            <i class="bi bi-person"></i> Nombre
+                                        </label>
+                                        <input type="text" class="form-control" id="regNombre" required
+                                            placeholder="Tu nombre">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="regApellido" class="form-label">
+                                            <i class="bi bi-person"></i> Apellido
+                                        </label>
+                                        <input type="text" class="form-control" id="regApellido" required
+                                            placeholder="Tu apellido">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="regCedula" class="form-label">
+                                        <i class="bi bi-card-text"></i> Cédula
+                                    </label>
+                                    <input type="text" class="form-control" id="regCedula" required
+                                        placeholder="Tu número de cédula">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="regTelefono" class="form-label">
+                                            <i class="bi bi-telephone"></i> Teléfono
+                                        </label>
+                                        <input type="tel" class="form-control" id="regTelefono" required
+                                            placeholder="Tu teléfono">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="regCiudad" class="form-label">
+                                            <i class="bi bi-geo-alt"></i> Ciudad
+                                        </label>
+                                        <input type="text" class="form-control" id="regCiudad" required
+                                            placeholder="Tu ciudad">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="regUsuario" class="form-label">
+                                        <i class="bi bi-person-badge"></i> Usuario
+                                    </label>
+                                    <input type="text" class="form-control" id="regUsuario" required
+                                        placeholder="Elige un nombre de usuario">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="regEmail" class="form-label">
+                                        <i class="bi bi-envelope"></i> Correo Electrónico
+                                    </label>
+                                    <input type="email" class="form-control" id="regEmail" required
+                                        placeholder="Tu correo electrónico">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="regPassword" class="form-label">
+                                        <i class="bi bi-lock"></i> Contraseña
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="regPassword" required
+                                            placeholder="Elige una contraseña">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            onclick="togglePasswordCliente('registro')">
+                                            <i class="bi bi-eye" id="toggleIconRegistro"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="registroErrorCliente" class="alert alert-danger d-none" role="alert">
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button id="btn-registro-cliente" class="btn btn-success" type="button">
+                                        <i class="bi bi-person-plus"></i>
+                                        Crear Cuenta
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="text-center">
+                        <small class="text-muted">
+                            <i class="bi bi-shield-check"></i>
+                            Sistema de Reservas de Le Salon de Lumière
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Viejo de Reserva (se eliminará) -->
+    <div class="modal fade" id="ModalEstudiante" tabindex="-1" style="display:none;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header text-white" style="background: var(--gradient-secondary) !important;">
+                    <h5 class="modal-title">
+                        <i class="bi bi-calendar-heart me-2"></i>
+                        Realizar Reserva
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="EstudianteForm">
+                        <div class="mb-3">
+                            <label for="loginEstudiante" class="form-label">
+                                <i class="bi bi-person"></i> Nombre Completo
+                            </label>
+                            <input type="text" class="form-control" id="loginEstudiante" required
+                                placeholder="Ingresa tu nombre completo">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="EstudianteContraseña" class="form-label">
+                                <i class="bi bi-telephone"></i> Teléfono de Contacto
+                            </label>
+                            <input type="tel" class="form-control" id="EstudianteContraseña" required
+                                placeholder="Ingresa tu número de teléfono">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-calendar-date"></i> Fecha
+                                </label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="bi bi-clock"></i> Hora
+                                </label>
+                                <input type="time" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-people"></i> Número de Personas
+                            </label>
+                            <select class="form-select" required>
+                                <option value="">Selecciona...</option>
+                                <option value="1">1 persona</option>
+                                <option value="2">2 personas</option>
+                                <option value="3">3 personas</option>
+                                <option value="4">4 personas</option>
+                                <option value="5">5 personas</option>
+                                <option value="6">6 personas</option>
+                                <option value="7">7 personas</option>
+                                <option value="8">8 personas</option>
+                                <option value="mas">Más de 8 personas</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button id="btn-estudiante-login" class="btn btn-warning" type="button"
+                                style="background: var(--gradient-gold) !important; border: none; color: var(--primary-color); font-weight: 600;">
+                                <i class="bi bi-calendar-check"></i>
+                                Confirmar Reserva
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr>
+                    <div class="text-center">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle"></i>
+                            Reserva tu mesa y vive una experiencia gastronómica única.
+                        </small>
+                    </div>
+
+                    <!-- Información de reservas -->
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <small class="text-muted">
+                            <i class="bi bi-shield-check"></i>
+                            <strong>Reserva Segura:</strong> Tu información está protegida y encriptada.<br>
+                            <i class="bi bi-telephone-check"></i>
+                            <strong>Confirmación Inmediata:</strong> Recibirás confirmación por SMS y email.<br>
+                            <i class="bi bi-star"></i>
+                            <strong>Experiencia Premium:</strong> Disfruta de nuestro servicio de primera
+                            clase.<br>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </section>
+
+    <script>
+        // Modal de Administrador - Sistema de Le Salon de Lumière
+        const ModalProfesor = new bootstrap.Modal(
+            document.getElementById('ModalProfesor'), {
+            keyboard: false
+        });
+
+        // Conectar el botón del navbar con el modal de administrador (con verificación)
+        (function () {
+            const btnAdmin = document.getElementById('btn-actualizar-admin');
+            if (!btnAdmin) return;
+            btnAdmin.addEventListener('click', function () {
+                try {
+                    // Mostrar el modal directamente
+                    ModalProfesor.show();
+
+                    // Limpiar campos al mostrar el modal
+                    const usuarioEl = document.getElementById('adminUsuarioModal');
+                    const passEl = document.getElementById('adminPasswordModal');
+                    const errEl = document.getElementById('loginError');
+                    if (usuarioEl) usuarioEl.value = '';
+                    if (passEl) passEl.value = '';
+                    if (errEl) errEl.classList.add('d-none');
+                } catch (e) {
+                    console.error('Error mostrando ModalProfesor:', e);
+                }
+            });
+        })();
+
+        // Función para alternar visibilidad de contraseña del admin
+        function togglePasswordAdmin() {
+            const passwordInput = document.getElementById('adminPasswordModal');
+            const toggleIcon = document.getElementById('toggleIconAdmin');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('bi-eye');
+                toggleIcon.classList.add('bi-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('bi-eye-slash');
+                toggleIcon.classList.add('bi-eye');
+            }
+        }
+
+        // Login de administrador con sistema de autenticación real
+        document.getElementById('btn-admin-modal').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const usuario = document.getElementById('adminUsuarioModal').value.trim();
+            const password = document.getElementById('adminPasswordModal').value.trim();
+            const errorDiv = document.getElementById('loginError');
+
+            // Validación de campos
+            if (!usuario || !password) {
+                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Por favor complete todos los campos';
+                errorDiv.classList.remove('d-none');
+                return;
+            } else {
+                errorDiv.classList.add('d-none');
+            }
+
+            // Preparar datos para enviar
+            const formData = new FormData();
+            formData.append('usuario', usuario);
+            formData.append('password', password);
+
+            // Mostrar loading con tema elegante
+            Swal.fire({
+                title: 'Verificando Credenciales',
+                html: `
+                            <div class="d-flex justify-content-center align-items-center" style="height: 80px;">
+                                <div class="spinner-border" style="color: var(--gold-color);" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <div class="ms-3" style="color: var(--primary-color);">
+                                    <strong>Autenticando...</strong><br>
+                                    <small>Sistema de seguridad del restaurante</small>
+                                </div>
+                            </div>
+                        `,
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                customClass: {
+                    popup: 'border-0 shadow-lg',
+                    title: 'fw-bold'
+                },
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdrop: 'rgba(45, 27, 18, 0.4)'
+            });
+
+            // Enviar credenciales al sistema de autenticación
+            fetch('app/validar_admin.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    // If server returned non-2xx, capture text for debugging
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error('Server error ' + response.status + ': ' + text);
+                        });
+                    }
+                    const ct = response.headers.get('content-type') || '';
+                    if (ct.indexOf('application/json') === -1) {
+                        return response.text().then(text => {
+                            throw new Error('Respuesta no JSON: ' + text);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Login exitoso
+                        setTimeout(() => {
+                            ModalProfesor.hide();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Acceso Autorizado!',
+                                html: `
+                                        <div style="color: var(--primary-color);">
+                                            <strong>Bienvenido al Panel de Control</strong><br>
+                                            <small>Le Salon de Lumière - Sistema Administrativo</small>
+                                        </div>
+                                    `,
+                                timer: 2000,
+                                showConfirmButton: false,
+                                timerProgressBar: true,
+                                customClass: {
+                                    popup: 'border-0 shadow-lg'
+                                },
+                                background: 'rgba(255, 255, 255, 0.95)'
+                            });
+
+                            // Redirigir al panel de administración
+                            setTimeout(() => {
+                                window.location.href = 'admin.php';
+                            }, 1800);
+                        }, 1000);
+
+                    } else {
+                        // Login fallido
+                        setTimeout(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Acceso Denegado',
+                                html: `
+                                        <div style="color: var(--primary-color);">
+                                            <strong>${data.message || 'Credenciales incorrectas'}</strong><br>
+                                            <small>Verifique su usuario y contraseña</small>
+                                        </div>
+                                    `,
+                                timer: 3000,
+                                showConfirmButton: false,
+                                timerProgressBar: true,
+                                customClass: {
+                                    popup: 'border-0 shadow-lg'
+                                },
+                                background: 'rgba(255, 255, 255, 0.95)'
+                            });
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de Conexión',
+                            html: `
+                                    <div style="color: var(--primary-color);">
+                                        <strong>No se pudo conectar al servidor</strong><br>
+                                        <small>Verifique la conexión a la base de datos</small>
+                                    </div>
+                                `,
+                            timer: 3000,
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            customClass: {
+                                popup: 'border-0 shadow-lg'
+                            },
+                            background: 'rgba(255, 255, 255, 0.95)'
+                        });
+                    }, 1000);
+                });
+        });
+
+        // ========== MODALES: SELECCIÓN, ADMIN Y CLIENTE ==========
+        const ModalSeleccionPerfil = new bootstrap.Modal(
+            document.getElementById('ModalSeleccionPerfil'), {
+            keyboard: false
+        });
+
+        // ========== MODAL Y FUNCIONALIDAD PARA CLIENTES ==========
+        const ModalCliente = new bootstrap.Modal(
+            document.getElementById('ModalCliente'), {
+            keyboard: false
+        });
+
+        // Conectar el botón INGRESAR del navbar con el modal de selección de perfil
+        (function () {
+            const btnIngresarEl = document.getElementById('btn-ingresar');
+            if (!btnIngresarEl) return;
+            btnIngresarEl.addEventListener('click', function () {
+                try {
+                    ModalSeleccionPerfil.show();
+                } catch (err) {
+                    console.error('Error mostrando ModalSeleccionPerfil:', err);
+                }
+            });
+        })();
+
+        // Botones dentro del modal de selección
+        (function () {
+            const btnOpenCliente = document.getElementById('btn-open-cliente');
+            const btnOpenAdmin = document.getElementById('btn-open-admin');
+            if (btnOpenCliente) {
+                btnOpenCliente.addEventListener('click', function () {
+                    try {
+                        ModalSeleccionPerfil.hide();
+                        // Limpiar campos cliente
+                        const u = document.getElementById('loginUsuario');
+                        const p = document.getElementById('loginPassword');
+                        const e = document.getElementById('loginErrorCliente');
+                        if (u) u.value = '';
+                        if (p) p.value = '';
+                        if (e) e.classList.add('d-none');
+                        ModalCliente.show();
+                    } catch (err) {
+                        console.error('Error abriendo ModalCliente:', err);
+                    }
+                });
+            }
+            if (btnOpenAdmin) {
+                btnOpenAdmin.addEventListener('click', function () {
+                    try {
+                        ModalSeleccionPerfil.hide();
+                        // Limpiar campos admin
+                        const usuarioEl = document.getElementById('adminUsuarioModal');
+                        const passEl = document.getElementById('adminPasswordModal');
+                        const errEl = document.getElementById('loginError');
+                        if (usuarioEl) usuarioEl.value = '';
+                        if (passEl) passEl.value = '';
+                        if (errEl) errEl.classList.add('d-none');
+                        ModalProfesor.show();
+                    } catch (err) {
+                        console.error('Error abriendo ModalProfesor:', err);
+                    }
+                });
+            }
+        })();
+
+        // Conectar el botón del cliente con verificación de sesión (con verificación)
+        const btnClienteLoginEl = document.getElementById('btn-cliente-login');
+        if (btnClienteLoginEl) btnClienteLoginEl.addEventListener('click', async function () {
+            try {
+                // Verificar si ya tiene sesión activa
+                const response = await fetch('app/verificar_sesion_cliente.php', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.authenticated) {
+                    // Si ya tiene sesión, redirigir al perfil
+                    window.location.href = 'perfil_cliente.php';
+                } else {
+                    // Si no tiene sesión, mostrar modal de login
+                    ModalCliente.show();
+                    // Limpiar campos
+                    document.getElementById('loginUsuario').value = '';
+                    document.getElementById('loginPassword').value = '';
+                    document.getElementById('loginErrorCliente').classList.add('d-none');
+                }
+            } catch (error) {
+                console.error('Error al verificar sesión:', error);
+                // En caso de error, mostrar modal de login
+                ModalCliente.show();
+                document.getElementById('loginUsuario').value = '';
+                document.getElementById('loginPassword').value = '';
+                document.getElementById('loginErrorCliente').classList.add('d-none');
+            }
+        });
+
+        // Función para alternar visibilidad de contraseña del cliente
+        function togglePasswordCliente(tipo) {
+            if (tipo === 'login') {
+                const passwordInput = document.getElementById('loginPassword');
+                const toggleIcon = document.getElementById('toggleIconLogin');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.classList.remove('bi-eye');
+                    toggleIcon.classList.add('bi-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.classList.remove('bi-eye-slash');
+                    toggleIcon.classList.add('bi-eye');
+                }
+            } else if (tipo === 'registro') {
+                const passwordInput = document.getElementById('regPassword');
+                const toggleIcon = document.getElementById('toggleIconRegistro');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleIcon.classList.remove('bi-eye');
+                    toggleIcon.classList.add('bi-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleIcon.classList.remove('bi-eye-slash');
+                    toggleIcon.classList.add('bi-eye');
+                }
+            }
+        }
+
+        // Login de cliente
+        document.getElementById('btn-login-cliente').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const usuario = document.getElementById('loginUsuario').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const errorDiv = document.getElementById('loginErrorCliente');
+
+            // Validación
+            if (!usuario || !password) {
+                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Por favor complete todos los campos';
+                errorDiv.classList.remove('d-none');
+                return;
+            } else {
+                errorDiv.classList.add('d-none');
+            }
+
+            const formData = new FormData();
+            formData.append('usuario', usuario);
+            formData.append('password', password);
+
+            // Mostrar loading
+            Swal.fire({
+                title: 'Verificando Credenciales',
+                html: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
+
+            fetch('app/validar_cliente_simple.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error('Server error ' + response.status);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Login exitoso
+                        setTimeout(() => {
+                            ModalCliente.hide();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Bienvenido!',
+                                html: `<strong>${data.cliente.nombre} ${data.cliente.apellido}</strong><br><small>Ahora puedes hacer tu reserva</small>`,
+                                timer: 2000,
+                                showConfirmButton: false,
+                                timerProgressBar: true
+                            });
+
+                            // Verificar si hay mesa pendiente y seleccionarla
+                            const mesaPendiente = localStorage.getItem('mesa_pendiente');
+                            if (mesaPendiente) {
+                                localStorage.removeItem('mesa_pendiente');
+                                // Seleccionar la mesa después del login
+                                setTimeout(async () => {
+                                    try {
+                                        const response = await fetch('app/api/seleccionar_mesa.php', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ mesa_id: mesaPendiente })
+                                        });
+                                        const mesaData = await response.json();
+                                        if (mesaData.success) {
+                                            window.location.href = 'mesas.php';
+                                        } else {
+                                            window.location.href = 'mesas.php';
+                                        }
+                                    } catch (error) {
+                                        console.error('Error al seleccionar mesa:', error);
+                                        window.location.href = 'mesas.php';
+                                    }
+                                }, 1800);
+                            } else {
+                                // Redirigir al perfil del cliente
+                                setTimeout(() => {
+                                    window.location.href = 'perfil_cliente.php';
+                                }, 1800);
+                            }
+                        }, 1000);
+                    } else {
+                        // Login fallido
+                        setTimeout(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Acceso Denegado',
+                                text: data.message || 'Credenciales incorrectas',
+                                timer: 3000,
+                                showConfirmButton: false,
+                                timerProgressBar: true
+                            });
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de Conexión',
+                            text: 'No se pudo conectar al servidor',
+                            timer: 3000,
+                            showConfirmButton: false,
+                            timerProgressBar: true
+                        });
+                    }, 1000);
+                });
+        });
+
+        // Registro de cliente
+        document.getElementById('btn-registro-cliente').addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('regNombre').value.trim();
+            const apellido = document.getElementById('regApellido').value.trim();
+            const cedula = document.getElementById('regCedula').value.trim();
+            const telefono = document.getElementById('regTelefono').value.trim();
+            const ciudad = document.getElementById('regCiudad').value.trim();
+            const usuario = document.getElementById('regUsuario').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const errorDiv = document.getElementById('registroErrorCliente');
+
+            // Validación
+            if (!nombre || !apellido || !cedula || !telefono || !ciudad || !usuario || !email || !password) {
+                errorDiv.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Por favor complete todos los campos';
+                errorDiv.classList.remove('d-none');
+                return;
+            } else {
+                errorDiv.classList.add('d-none');
+            }
+
+            const formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('apellido', apellido);
+            formData.append('cedula', cedula);
+            formData.append('telefono', telefono);
+            formData.append('ciudad', ciudad);
+            formData.append('usuario', usuario);
+            formData.append('email', email);
+            formData.append('password', password);
+
+            // Mostrar loading
+            Swal.fire({
+                title: 'Creando Cuenta',
+                html: '<div class="spinner-border text-success" role="status"><span class="visually-hidden">Cargando...</span></div>',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            });
+
+            fetch('app/registro_cliente_simple.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error('Server error ' + response.status);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Registro exitoso
+                        setTimeout(() => {
+                            ModalCliente.hide();
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Cuenta Creada!',
+                                html: `<strong>Bienvenido ${data.cliente.nombre}!</strong><br><small>Tu cuenta ha sido creada exitosamente</small>`,
+                                timer: 2000,
+                                showConfirmButton: false,
+                                timerProgressBar: true
+                            });
+
+                            // Verificar si hay mesa pendiente y seleccionarla
+                            const mesaPendiente = localStorage.getItem('mesa_pendiente');
+                            if (mesaPendiente) {
+                                localStorage.removeItem('mesa_pendiente');
+                                // Seleccionar la mesa después del registro
+                                setTimeout(async () => {
+                                    try {
+                                        const response = await fetch('app/api/seleccionar_mesa.php', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ mesa_id: mesaPendiente })
+                                        });
+                                        const mesaData = await response.json();
+                                        if (mesaData.success) {
+                                            window.location.href = 'mesas.php';
+                                        } else {
+                                            window.location.href = 'mesas.php';
+                                        }
+                                    } catch (error) {
+                                        console.error('Error al seleccionar mesa:', error);
+                                        window.location.href = 'mesas.php';
+                                    }
+                                }, 1800);
+                            } else {
+                                // Redirigir a mesas.php sin mesa seleccionada (ya tiene sesión activa)
+                                setTimeout(() => {
+                                    window.location.href = 'mesas.php';
+                                }, 1800);
+                            }
+                        }, 1000);
+                    } else {
+                        // Registro fallido
+                        setTimeout(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error al Registrar',
+                                text: data.message || 'No se pudo crear la cuenta',
+                                timer: 3000,
+                                showConfirmButton: false,
+                                timerProgressBar: true
+                            });
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error de Conexión',
+                            text: 'No se pudo conectar al servidor',
+                            timer: 3000,
+                            showConfirmButton: false,
+                            timerProgressBar: true
+                        });
+                    }, 1000);
+                });
+        });
+
+    </script>
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="main-footer" id="contacto">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-icon">
+                    <img src="utils/imagen/LOGO-FOOTER.png" alt="Lumière"
+                        style="max-width: 120px; width: 100%; height: auto;">
+                </div>
+                <div>
+                    <p class="mb-0">
+                        © 2025 Le Salon de Lumière -
+                        <i class="bi bi-heart-fill text-warning"></i>
+                        Experiencia Gastronómica Premium
+                    </p>
+                    <small class="text-muted">
+                        <i class="bi bi-shield-lock"></i>
+                        Sistema Seguro de Reservas |
+                        <i class="bi bi-telephone"></i>
+                        Reservas: 0990000001
+                        <br>
+                        <i class="bi bi-copyright"></i>
+                        <span class="text-muted">
+                            Copyright ©Ing. Joffre Gómez 2025
+                        </span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="public/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+    <!-- Animaciones personalizadas -->
+    <script>
+        // Agregar clase de animación cuando el elemento entra en vista
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observar elementos con animación
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
+
+        // Funcionalidad Modo Oscuro
+        const darkModeBtn = document.getElementById('darkModeBtn');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const darkModeText = document.getElementById('darkModeText');
+        const body = document.body;
+
+        // Verificar si hay preferencia guardada
+        const currentMode = localStorage.getItem('darkMode');
+        if (currentMode === 'enabled') {
+            enableDarkMode();
+        }
+
+        darkModeBtn.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        });
+
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            darkModeIcon.classList.remove('bi-moon-fill');
+            darkModeIcon.classList.add('bi-sun-fill');
+            darkModeText.textContent = 'Modo Claro';
+            localStorage.setItem('darkMode', 'enabled');
+
+            // Cambiar estilos de los botones a tonos cafecito/marrón oscuro
+            const btnIngresar = document.getElementById('btn-ingresar');
+            darkModeBtn.style.setProperty('background', '#4a3529', 'important');
+            darkModeBtn.style.setProperty('color', '#f5f2ed', 'important');
+            darkModeBtn.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.4)';
+
+            if (btnIngresar) {
+                btnIngresar.style.setProperty('background', '#4a3529', 'important');
+                btnIngresar.style.setProperty('color', '#f5f2ed', 'important');
+                btnIngresar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.4)';
+            }
+
+        }
+
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            darkModeIcon.classList.remove('bi-sun-fill');
+            darkModeIcon.classList.add('bi-moon-fill');
+            darkModeText.textContent = 'Modo Oscuro';
+            localStorage.setItem('darkMode', 'disabled');
+
+            // Restaurar estilos originales de los botones
+            const btnIngresar = document.getElementById('btn-ingresar');
+            darkModeBtn.style.setProperty('background', '#c9a04c', 'important');
+            darkModeBtn.style.setProperty('color', '#2d1b12', 'important');
+            darkModeBtn.style.boxShadow = '0 2px 8px rgba(201, 160, 76, 0.3)';
+
+            if (btnIngresar) {
+                btnIngresar.style.setProperty('background', '#c9a04c', 'important');
+                btnIngresar.style.setProperty('color', '#2d1b12', 'important');
+                btnIngresar.style.boxShadow = '0 2px 8px rgba(201, 160, 76, 0.3)';
+            }
+        }
+
+        // Event listeners para hover de botones que respetan el modo activo
+        const btnIngresar = document.getElementById('btn-ingresar');
+
+        darkModeBtn.addEventListener('mouseenter', function () {
+            this.style.transform = 'translateY(-2px)';
+            if (body.classList.contains('dark-mode')) {
+                this.style.background = '#3d2e24 !important';
+                this.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.6)';
+            } else {
+                this.style.boxShadow = '0 6px 16px rgba(201, 160, 76, 0.5)';
+            }
+        });
+
+        darkModeBtn.addEventListener('mouseleave', function () {
+            this.style.transform = 'translateY(0)';
+            if (body.classList.contains('dark-mode')) {
+                this.style.background = '#4a3529 !important';
+                this.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.4)';
+            } else {
+                this.style.boxShadow = '0 2px 8px rgba(201, 160, 76, 0.3)';
+            }
+        });
+
+        if (btnIngresar) {
+            btnIngresar.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-2px)';
+                if (body.classList.contains('dark-mode')) {
+                    this.style.background = '#3d2e24 !important';
+                    this.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.6)';
+                } else {
+                    this.style.boxShadow = '0 6px 16px rgba(201, 160, 76, 0.5)';
+                }
+            });
+
+            btnIngresar.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+                if (body.classList.contains('dark-mode')) {
+                    this.style.background = '#4a3529 !important';
+                    this.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.4)';
+                } else {
+                    this.style.boxShadow = '0 2px 8px rgba(201, 160, 76, 0.3)';
+                }
+            });
+        }
+
+
+
+        // Navegación suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80; // Espacio para el navbar
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Cambiar navbar al hacer scroll
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+
+        // Función para mostrar/ocultar contraseña en el modal
+        function togglePasswordModal() {
+            const passwordField = document.getElementById('adminPassword');
+            const passwordProfesor = document.getElementById('ProfesorContraseña');
+            const toggleIcon = document.getElementById('toggleIconModal');
+
+            if (passwordField.type === 'password' && passwordProfesor.type === 'password') {
+                passwordField.type = 'text';
+                passwordProfesor.type = 'text';
+                toggleIcon.classList.remove('bi-eye');
+                toggleIcon.classList.add('bi-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                passwordProfesor.type = 'password';
+                toggleIcon.classList.remove('bi-eye-slash');
+                toggleIcon.classList.add('bi-eye');
+            }
+        }
+
+        // Prevenir caché de la página después de logout
+        // Si el usuario cerró sesión y presiona atrás, limpiar cualquier dato
+        window.addEventListener('pageshow', function (event) {
+            // Si la página se carga desde caché del navegador
+            if (event.persisted) {
+                // Limpiar storage por seguridad
+                sessionStorage.clear();
+            }
+        });
+
+        // ===== VISUALIZACIÓN DE MESAS EN TIEMPO REAL =====
+        class MesasVisualizacion {
+            constructor() {
+                this.mesas = [];
+                this.mesasFiltradas = [];
+                this.updateInterval = null;
+                this.init();
+            }
+
+            async init() {
+                await this.cargarMesas();
+                this.iniciarActualizacionAutomatica();
+                this.configurarFiltros();
+
+                // Event listener para el botón de actualizar
+                const btnActualizar = document.getElementById('btnActualizarMesas');
+                if (btnActualizar) {
+                    btnActualizar.addEventListener('click', () => this.cargarMesas());
+                }
+            }
+
+            configurarFiltros() {
+                const filtroPrecio = document.getElementById('filtroPrecio');
+                if (filtroPrecio) {
+                    filtroPrecio.addEventListener('change', (e) => {
+                        this.filtrarPorPrecio(e.target.value);
+                    });
+                }
+            }
+
+            filtrarPorPrecio(rangoSeleccionado) {
+                if (rangoSeleccionado === 'todos') {
+                    this.mesasFiltradas = this.mesas;
+                } else {
+                    const [min, max] = rangoSeleccionado.split('-').map(v => v === '' ? Infinity : parseFloat(v));
+
+                    this.mesasFiltradas = this.mesas.filter(mesa => {
+                        const precio = parseFloat(mesa.precio_reserva || 5);
+                        if (max === undefined) {
+                            // Caso "20+" (sin límite superior)
+                            return precio >= min;
+                        }
+                        return precio >= min && precio <= max;
+                    });
+                }
+
+                this.renderizarMesas();
+                this.mostrarMensajeFiltro(this.mesasFiltradas.length);
+            }
+
+            mostrarMensajeFiltro(cantidad) {
+                const gallery = document.getElementById('mesasGallery');
+                if (cantidad === 0) {
+                    gallery.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-search" style="font-size: 3rem; color: #d4af37;"></i>
+                    <p class="mt-3" style="color: #d4af37; font-size: 1.2rem;">
+                        No se encontraron mesas en este rango de precio
+                    </p>
+                    <p class="text-muted">Intenta con otro rango de precio</p>
+                </div>
+            `;
+                }
+            }
+
+            async cargarMesas() {
+                try {
+                    const response = await fetch('app/api/mesas_estado.php');
+                    if (!response.ok) {
+                        throw new Error('Error al obtener las mesas');
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.mesas = data.mesas;
+                        this.mesasFiltradas = this.mesas; // Inicialmente mostrar todas
+                        this.renderizarMesas();
+                        this.actualizarEstadisticas(data.resumen);
+                    } else {
+                        console.error('Error en la respuesta:', data.message);
+                    }
+                } catch (error) {
+                    console.error('Error cargando mesas:', error);
+                    this.mostrarError();
+                }
+            }
+
+            renderizarMesas() {
+                // Renderizar todas las mesas en un solo grid de galería
+                const gallery = document.getElementById('mesasGallery');
+                if (gallery) {
+                    gallery.innerHTML = '';
+                    this.mesasFiltradas.forEach(mesa => {
+                        const mesaElement = this.crearElementoMesa(mesa);
+                        gallery.appendChild(mesaElement);
+                    });
+                }
+            }
+
+            agruparPorZona(mesas) {
+                return mesas.reduce((grupos, mesa) => {
+                    const zona = mesa.ubicacion || 'interior';
+                    if (!grupos[zona]) {
+                        grupos[zona] = [];
+                    }
+                    grupos[zona].push(mesa);
+                    return grupos;
+                }, {});
+            }
+
+            crearElementoMesa(mesa) {
+                const mesaDiv = document.createElement('div');
+                mesaDiv.className = 'col-md-4 col-lg-3 fade-in-up';
+
+                const disponible = mesa.estado === 'disponible';
+                const zona = mesa.ubicacion || 'interior';
+                const capacidad = mesa.capacidad_minima && mesa.capacidad_maxima
+                    ? (mesa.capacidad_minima === mesa.capacidad_maxima
+                        ? mesa.capacidad_maxima
+                        : `${mesa.capacidad_minima}-${mesa.capacidad_maxima}`)
+                    : mesa.capacidad;
+
+                // Imágenes elegantes según la zona
+                const imagenes = {
+                    'interior': 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80',
+                    'terraza': 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80',
+                    'vip': 'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=600&q=80',
+                    'bar': 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&q=80'
+                };
+
+                const zonaTexto = {
+                    'interior': 'Salón Principal',
+                    'terraza': 'Terraza',
+                    'vip': 'Área VIP',
+                    'bar': 'Bar & Lounge'
+                };
+
+                mesaDiv.innerHTML = `
+                    <div class="mesa-card" style="position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: all 0.3s ease; cursor: pointer; background: #3d2e24; ${!disponible ? 'opacity: 0.6;' : ''}"
+                        onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 40px rgba(212, 175, 55, 0.4)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.2)'">
+                        
+                        <!-- Imagen de fondo -->
+                        <div style="position: relative; height: 200px; overflow: hidden;">
+                            <img src="${imagenes[zona]}" alt="${zonaTexto[zona]}" 
+                                style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;"
+                                onmouseover="this.style.transform='scale(1.05)'"
+                                onmouseout="this.style.transform='scale(1)'">
+                            
+                            <!-- Overlay gradient -->
+                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(61,46,36,0.7) 100%);"></div>
+                            
+                            <!-- Badge de disponibilidad -->
+                            <div style="position: absolute; top: 15px; right: 15px; background: ${disponible ? '#d4af37' : '#6c5643'}; color: ${disponible ? '#3d2e24' : '#999'}; padding: 5px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+                                ${disponible ? '✓ Disponible' : '✗ No Disponible'}
+                            </div>
+                            
+                            <!-- Información sobre la imagen -->
+                            <div style="position: absolute; bottom: 15px; left: 20px; color: white;">
+                                <div style="font-size: 0.8rem; color: #d4af37; margin-bottom: 5px; font-weight: 500;">${zonaTexto[zona]}</div>
+                                <div style="font-size: 1.6rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.5);">
+                                    Mesa ${mesa.numero}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Información de la mesa -->
+                        <div class="mesa-card-body" style="padding: 20px; background: #3d2e24;">
+                            <!-- Capacidad y Ubicación -->
+                            <div class="d-flex justify-content-between align-items-start mb-3" style="border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 12px;">
+                                <div>
+                                    <div class="mesa-capacidad-label" style="color: #d4af37; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; text-transform: uppercase;">Capacidad</div>
+                                    <div class="mesa-capacidad" style="color: #f5f2ed; font-size: 0.95rem; font-weight: 500;">
+                                        <i class="bi bi-people-fill" style="color: #d4af37;"></i> ${capacidad} personas
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div class="mesa-ubicacion-label" style="color: #d4af37; font-size: 0.75rem; font-weight: 600; margin-bottom: 5px; text-transform: uppercase;">Ubicación</div>
+                                    <div class="mesa-ubicacion" style="color: #f5f2ed; font-size: 0.85rem; font-weight: 500;">
+                                        <i class="bi bi-geo-alt-fill" style="color: #d4af37;"></i> ${zonaTexto[zona]}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Precio de reserva -->
+                            <div class="mesa-precio-box text-center mb-3" style="background: #c9a86a; padding: 15px; border-radius: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+                                <div style="font-size: 0.7rem; color: #3d2e24; font-weight: 600; margin-bottom: 5px; text-transform: uppercase;">Precio de Reserva</div>
+                                <div style="font-size: 1.8rem; font-weight: 700; color: #3d2e24;">
+                                    $${parseFloat(mesa.precio_reserva || 5).toFixed(2)}
+                                </div>
+                                <div class="mesa-consumo-text" style="font-size: 0.7rem; color: #5a4a3a; margin-top: 3px;">+ Consumo de platos</div>
+                            </div>
+                            
+                            ${disponible ? `
+                            <button class="btn w-100 mt-2" style="background: #8b7355; color: #f5f2ed; border: none; border-radius: 25px; padding: 12px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease;"
+                                onmouseover="this.style.background='#6d5942'; this.style.transform='scale(1.02)'"
+                                onmouseout="this.style.background='#8b7355'; this.style.transform='scale(1)'">
+                                <i class="bi bi-calendar-check"></i> Reservar Ahora
+                            </button>
+                            ` : `
+                            <button class="btn w-100 mt-2" style="background: #5a4a3a; color: #999; border: none; border-radius: 25px; padding: 12px; font-weight: 600; font-size: 0.9rem;" disabled>
+                                <i class="bi bi-x-circle"></i> ${this.obtenerTextoEstado(mesa.estado)}
+                            </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+
+                // Click para reservar o ver detalles
+                const card = mesaDiv.querySelector('.mesa-card');
+                card.addEventListener('click', () => this.mostrarDetallesMesa(mesa));
+
+                return mesaDiv;
+            }
+
+            obtenerColorEstado(estado) {
+                const colores = {
+                    'disponible': 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                    'ocupada': 'linear-gradient(135deg, #dc3545 0%, #e74c3c 100%)',
+                    'reservada': 'linear-gradient(135deg, #ffc107 0%, #ff9800 100%)',
+                    'mantenimiento': 'linear-gradient(135deg, #6c757d 0%, #5a6268 100%)'
+                };
+                return colores[estado] || colores['disponible'];
+            }
+
+            obtenerIconoMesa(mesa) {
+                const zona = mesa.ubicacion || 'interior';
+                const iconos = {
+                    'interior': '🍽️',
+                    'terraza': '🌿',
+                    'vip': '👑',
+                    'bar': '🍸'
+                };
+                return iconos[zona] || '🍽️';
+            }
+
+            obtenerBadgeEstado(estado) {
+                const badges = {
+                    'disponible': '✓',
+                    'ocupada': '✗',
+                    'reservada': '📅',
+                    'mantenimiento': '🔧'
+                };
+                return badges[estado] || '✓';
+            }
+
+            obtenerTextoEstado(estado) {
+                const textos = {
+                    'disponible': 'Disponible',
+                    'ocupada': 'Ocupada',
+                    'reservada': 'Reservada',
+                    'mantenimiento': 'Mantenimiento'
+                };
+                return textos[estado] || 'Disponible';
+            }
+
+            actualizarEstadisticas(resumen) {
+                // Estadísticas simplificadas - solo para consola
+                if (resumen) {
+                    console.log('Estadísticas de mesas:', resumen);
+                }
+            }
+
+            mostrarDetallesMesa(mesa) {
+                const estadoTexto = this.obtenerTextoEstado(mesa.estado);
+                const estadoColor = mesa.estado === 'disponible' ? 'success' :
+                    mesa.estado === 'ocupada' ? 'danger' :
+                        mesa.estado === 'reservada' ? 'warning' : 'secondary';
+
+                const precioReserva = parseFloat(mesa.precio_reserva || 5).toFixed(2);
+
+                Swal.fire({
+                    title: `Mesa ${mesa.numero}`,
+                    html: `
+                                <div style="text-align: left; color: #333;">
+                                    <p><strong><i class="bi bi-geo-alt-fill"></i> Ubicación:</strong> ${this.capitalizarPrimeraLetra(mesa.ubicacion)}</p>
+                                    <p><strong><i class="bi bi-people-fill"></i> Capacidad:</strong> ${mesa.capacidad_minima && mesa.capacidad_maxima
+                            ? (mesa.capacidad_minima === mesa.capacidad_maxima
+                                ? mesa.capacidad_maxima
+                                : `${mesa.capacidad_minima} - ${mesa.capacidad_maxima}`)
+                            : mesa.capacidad} personas</p>
+                                    <p><strong><i class="bi bi-cash-coin"></i> Precio de Reserva:</strong> 
+                                        <span style="color: var(--gold-color); font-weight: 700; font-size: 1.2rem;">$${precioReserva}</span>
+                                        <small class="text-muted"> + consumo</small>
+                                    </p>
+                                    <p><strong><i class="bi bi-info-circle-fill"></i> Estado:</strong> 
+                                        <span class="badge bg-${estadoColor}">${estadoTexto}</span>
+                                    </p>
+                                    ${mesa.estado === 'disponible'
+                            ? '<p class="text-success mt-3"><i class="bi bi-check-circle-fill"></i> ¡Esta mesa está disponible para reservar!</p>'
+                            : '<p class="text-muted mt-3"><i class="bi bi-x-circle-fill"></i> Esta mesa no está disponible en este momento.</p>'}
+                                </div>
+                            `,
+                    icon: 'info',
+                    confirmButtonText: mesa.estado === 'disponible' ? 'Reservar Mesa' : 'Entendido',
+                    confirmButtonColor: '#d4af37',
+                    showCancelButton: mesa.estado === 'disponible',
+                    cancelButtonText: 'Cerrar',
+                    cancelButtonColor: '#6c757d'
+                }).then((result) => {
+                    if (result.isConfirmed && mesa.estado === 'disponible') {
+                        // Guardar mesa seleccionada automáticamente
+                        this.seleccionarMesa(mesa.id);
+                    }
+                });
+            }
+
+            async seleccionarMesa(mesaId) {
+                try {
+                    // Primero verificar si está autenticado
+                    const sesionResponse = await fetch('app/verificar_sesion_cliente.php');
+                    const sesionData = await sesionResponse.json();
+
+                    if (!sesionData.authenticated) {
+                        // Guardar mesa_id en localStorage para seleccionarla después del login
+                        localStorage.setItem('mesa_pendiente', mesaId);
+                        // Mostrar modal de login del cliente
+                        document.getElementById('btn-cliente-login').click();
+                        return;
+                    }
+
+                    // Si está autenticado, seleccionar la mesa
+                    const response = await fetch('app/api/seleccionar_mesa.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ mesa_id: mesaId })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Mesa guardada exitosamente, redirigir a mesas.php
+                        window.location.href = 'mesas.php';
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message || 'No se pudo seleccionar la mesa',
+                            confirmButtonColor: '#d4af37'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error al seleccionar mesa:', error);
+                    // Guardar mesa en localStorage y abrir modal
+                    localStorage.setItem('mesa_pendiente', mesaId);
+                    document.getElementById('btn-cliente-login').click();
+                }
+            }
+
+            capitalizarPrimeraLetra(texto) {
+                if (!texto) return '';
+                return texto.charAt(0).toUpperCase() + texto.slice(1);
+            }
+
+            iniciarActualizacionAutomatica() {
+                // Actualizar cada 30 segundos
+                this.updateInterval = setInterval(() => {
+                    this.cargarMesas();
+                }, 30000);
+            }
+
+            mostrarError() {
+                const zonas = document.querySelectorAll('.mesas-grid');
+                zonas.forEach(zona => {
+                    zona.innerHTML = `
+                                <div class="col-12 text-center py-4">
+                                    <i class="bi bi-exclamation-triangle" style="font-size: 2rem; color: #dc3545;"></i>
+                                    <p class="text-muted mt-2">Error al cargar las mesas</p>
+                                </div>
+                            `;
+                });
+            }
+        }
+
+        // Inicializar visualización de mesas cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                new MesasVisualizacion();
+            });
+        } else {
+            new MesasVisualizacion();
+        }
+
+        // ==================== GESTIÓN DE MENÚ ====================
+        class MenuGastronomico {
+            constructor() {
+                this.categorias = [];
+                this.init();
+            }
+
+            init() {
+                this.cargarMenu();
+                this.configurarBotonesRapidos();
+            }
+
+            configurarBotonesRapidos() {
+                // Botón de Bebidas/Cócteles
+                const btnBebidas = document.getElementById('btnBebidasMenu');
+                if (btnBebidas) {
+                    btnBebidas.addEventListener('click', () => {
+                        const categoriaBebidas = this.categorias.find(c => c.nombre === 'Bebidas');
+                        if (categoriaBebidas) {
+                            this.mostrarPlatosCategoria(categoriaBebidas);
+                        } else {
+                            document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+
+                // Botón de Vinos
+                const btnVinos = document.getElementById('btnVinosMenu');
+                if (btnVinos) {
+                    btnVinos.addEventListener('click', () => {
+                        const categoriaVinos = this.categorias.find(c => c.nombre === 'Vinos');
+                        if (categoriaVinos) {
+                            this.mostrarPlatosCategoria(categoriaVinos);
+                        } else {
+                            document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+                }
+            }
+
+            async cargarMenu() {
+                try {
+                    const response = await fetch('app/api/obtener_menu.php');
+                    if (!response.ok) {
+                        throw new Error('Error al obtener el menú');
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        this.categorias = data.categorias;
+                        this.renderizarCategorias();
+                        // Reconfigurar botones después de cargar categorías
+                        this.configurarBotonesRapidos();
+                    } else {
+                        console.error('Error en la respuesta:', data.message);
+                        this.mostrarError();
+                    }
+                } catch (error) {
+                    console.error('Error cargando menú:', error);
+                    this.mostrarError();
+                }
+            }
+
+            renderizarCategorias() {
+                const container = document.getElementById('menuCategorias');
+                if (!container) return;
+
+                container.innerHTML = '';
+
+                // Iconos para cada categoría
+                const iconos = {
+                    'Entradas': '🥗',
+                    'Platos Principales': '🍽️',
+                    'Carnes': '🥩',
+                    'Vinos': '🍷',
+                    'Mariscos': '🦞',
+                    'Postres': '🍰',
+                    'Bebidas': '🥤'
+                };
+
+                this.categorias.forEach((categoria, index) => {
+                    const categoriaDiv = document.createElement('div');
+                    categoriaDiv.className = 'col-lg-2 col-md-3 col-sm-4 col-6 fade-in-up';
+                    categoriaDiv.style.animationDelay = `${index * 0.1}s`;
+
+                    const icono = iconos[categoria.nombre] || '🍴';
+                    const cantidadPlatos = categoria.platos.length;
+
+                    categoriaDiv.innerHTML = `
+                        <div class="categoria-card" 
+                            style="background: white; border: none; border-radius: 20px; margin: 0 auto; cursor: pointer; transition: all 0.4s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.1); overflow: hidden; max-width: 180px;"
+                            onmouseover="this.style.transform='translateY(-12px)'; this.style.boxShadow='0 12px 35px rgba(212, 175, 55, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.1)'">
+                            
+                            <div style="background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 100%); height: 140px; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative;">
+                                ${icono}
+                            </div>
+                            
+                            <div style="padding: 18px 12px; text-align: center; background: white;">
+                                <div class="categoria-nombre" style="font-size: 1rem; font-weight: 700; color: var(--primary-color); line-height: 1.3; margin-bottom: 6px;">
+                                    ${categoria.nombre}
+                                </div>
+                                <div class="categoria-count" style="font-size: 0.85rem; color: #d4af37; font-weight: 500;">
+                                    ${cantidadPlatos} plato${cantidadPlatos !== 1 ? 's' : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Click para mostrar platos de la categoría
+                    const card = categoriaDiv.querySelector('.categoria-card');
+                    card.addEventListener('click', () => this.mostrarPlatosCategoria(categoria));
+
+                    container.appendChild(categoriaDiv);
+                });
+            }
+
+            mostrarPlatosCategoria(categoria) {
+                const iconos = {
+                    'Entradas': '🥗',
+                    'Platos Principales': '🍽️',
+                    'Carnes': '🥩',
+                    'Vinos': '🍷',
+                    'Mariscos': '🦞',
+                    'Postres': '🍰',
+                    'Bebidas': '🥤'
+                };
+
+                const icono = iconos[categoria.nombre] || '🍴';
+
+                let platosHTML = '';
+
+                if (categoria.platos.length === 0) {
+                    platosHTML = '<p class="text-center text-muted py-4">No hay platos disponibles en esta categoría</p>';
+                } else {
+                    platosHTML = '<div class="row g-3">';
+                    categoria.platos.forEach(plato => {
+                        const precio = parseFloat(plato.precio).toFixed(2);
+                        const disponible = parseInt(plato.stock_disponible) > 0;
+
+                        // Imágenes por defecto para categorías si no tiene imagen_url
+                        const imagenesPorCategoria = {
+                            'Entradas': 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&q=80',
+                            'Platos Principales': 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80',
+                            'Carnes': 'https://images.unsplash.com/photo-1558030006-450675393462?w=400&q=80',
+                            'Vinos': 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80',
+                            'Mariscos': 'https://images.unsplash.com/photo-1559737558-2f5a35f4523e?w=400&q=80',
+                            'Postres': 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&q=80',
+                            'Bebidas': 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&q=80'
+                        };
+                        const imagenPlato = plato.imagen_url || imagenesPorCategoria[categoria.nombre] || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80';
+
+                        platosHTML += `
+                            <div class="col-md-6">
+                                <div class="plato-item" style="background: ${disponible ? 'white' : '#f8f9fa'}; border-radius: 15px; overflow: hidden; border: 2px solid ${disponible ? 'rgba(212, 175, 55, 0.2)' : '#e9ecef'}; transition: all 0.3s ease; ${disponible ? 'cursor: pointer;' : 'opacity: 0.7;'}"
+                                    ${disponible ? `onmouseover="this.style.borderColor='var(--gold-color)'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 20px rgba(212,175,55,0.3)'" onmouseout="this.style.borderColor='rgba(212, 175, 55, 0.2)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'"` : ''}>
+                                    
+                                    <!-- Imagen del plato -->
+                                    <div style="position: relative; height: 180px; overflow: hidden;">
+                                        <img src="${imagenPlato}" alt="${plato.nombre}" 
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                        ${!disponible ? '<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;"><span class="badge bg-secondary" style="font-size: 1rem; padding: 10px 20px;">Agotado</span></div>' : ''}
+                                        <div style="position: absolute; top: 10px; right: 10px; background: var(--gradient-gold); color: var(--primary-color); padding: 8px 15px; border-radius: 20px; font-weight: 700; font-size: 1rem; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.4);">
+                                            $${precio}
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Información del plato -->
+                                    <div style="padding: 15px;">
+                                        <h6 style="color: var(--primary-color); font-weight: 700; margin-bottom: 8px; font-size: 1rem;">
+                                            ${plato.nombre}
+                                        </h6>
+                                        <p style="color: #666; font-size: 0.85rem; margin-bottom: 8px; line-height: 1.4;">
+                                            ${plato.descripcion || 'Delicioso plato de nuestra carta'}
+                                        </p>
+                                        ${plato.ingredientes_especiales ? `
+                                        <p style="color: #999; font-size: 0.75rem; margin-bottom: 8px;">
+                                            <i class="bi bi-info-circle"></i> ${plato.ingredientes_especiales}
+                                        </p>
+                                        ` : ''}
+                                        ${plato.tiempo_preparacion ? `
+                                        <p style="color: #999; font-size: 0.75rem; margin-bottom: 0;">
+                                            <i class="bi bi-clock"></i> ${plato.tiempo_preparacion} min
+                                        </p>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    platosHTML += '</div>';
+                }
+
+                Swal.fire({
+                    title: `<div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                                <span style="font-size: 2.5rem;">${icono}</span>
+                                <span>${categoria.nombre}</span>
+                            </div>`,
+                    html: `
+                        ${categoria.descripcion ? `<p class="text-muted mb-4" style="font-size: 1rem;">${categoria.descripcion}</p>` : ''}
+                        ${platosHTML}
+                    `,
+                    width: '900px',
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    customClass: {
+                        container: 'menu-modal-container',
+                        popup: 'menu-modal-popup'
+                    },
+                    didOpen: () => {
+                        // Aplicar estilos al modal
+                        const popup = document.querySelector('.menu-modal-popup');
+                        if (popup) {
+                            popup.style.borderRadius = '25px';
+                            popup.style.padding = '30px';
+                        }
+                    }
+                });
+            }
+
+            mostrarError() {
+                const container = document.getElementById('menuCategorias');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="bi bi-exclamation-triangle" style="font-size: 3rem; color: #ffc107;"></i>
+                            <p class="text-muted mt-3">Error al cargar el menú. Por favor, intenta de nuevo más tarde.</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Inicializar menú cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                new MenuGastronomico();
+            });
+        } else {
+            new MenuGastronomico();
+        }
+
+        // ========================================
+        // CARGAR INFORMACIÓN DE HORARIOS DINÁMICA
+        // ========================================
+        async function cargarInfoHorarios() {
+            try {
+                const response = await fetch('app/api/obtener_info_horarios.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    const infoHorarios = document.getElementById('infoHorarios');
+                    if (infoHorarios) {
+                        let textoHorario = '';
+
+                        if (data.horarios.usar_especificos) {
+                            // Mostrar horarios específicos por día
+                            textoHorario = `Horarios: Lun-Vie ${data.horarios.lunes_viernes}`;
+                            if (data.horarios.sabado !== data.horarios.lunes_viernes) {
+                                textoHorario += ` | Sáb ${data.horarios.sabado}`;
+                            }
+                            if (data.horarios.domingo !== data.horarios.lunes_viernes) {
+                                textoHorario += ` | Dom ${data.horarios.domingo}`;
+                            }
+                        } else if (data.horarios.general) {
+                            // Mostrar horario general
+                            textoHorario = `Horarios: ${data.horarios.general}`;
+                        }
+
+                        // Agregar días cerrados si existen
+                        if (data.dias_cerrados) {
+                            textoHorario += ` | ${data.dias_cerrados}`;
+                        }
+
+                        // Indicar si las reservas están desactivadas
+                        if (!data.reservas_activas) {
+                            textoHorario += ' | ⚠️ Reservas temporalmente deshabilitadas';
+                        }
+
+                        infoHorarios.innerHTML = `
+                            <i class="bi bi-clock-fill" style="color: var(--gold-color);"></i> 
+                            <span class="leyenda-text">${textoHorario}</span>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Error al cargar horarios:', error);
+                const infoHorarios = document.getElementById('infoHorarios');
+                if (infoHorarios) {
+                    infoHorarios.innerHTML = `
+                        <i class="bi bi-clock-fill" style="color: var(--gold-color);"></i> 
+                        <span class="leyenda-text">Horarios: Consultar disponibilidad</span>
+                    `;
+                }
+            }
+        }
+
+        // Cargar horarios al iniciar la página
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', cargarInfoHorarios);
+        } else {
+            cargarInfoHorarios();
+        }
+
+        // ========================================
+        // MODALES DE INFORMACIÓN DE ESPACIOS
+        // ========================================
+
+        function mostrarInfoTerraza() {
+            Swal.fire({
+                title: '<span style="color: #d4af37;">🌿 TERRAZA</span>',
+                html: `
+                    <div style="text-align: left; padding: 20px;">
+                        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80" 
+                             style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
+                        
+                        <h4 style="color: #d4af37; margin-bottom: 15px;">✨ Características</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li><strong>Capacidad:</strong> Hasta 40 personas</li>
+                            <li><strong>Ambiente:</strong> Al aire libre con vista panorámica</li>
+                            <li><strong>Ideal para:</strong> Comidas familiares, eventos casuales</li>
+                            <li><strong>Extras:</strong> Sombrillas, calefactores en temporada fría</li>
+                        </ul>
+
+                        <h4 style="color: #d4af37; margin: 20px 0 15px 0;">🍽️ Servicios Incluidos</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li>Servicio de meseros dedicados</li>
+                            <li>Vista al jardín y entorno natural</li>
+                            <li>Música ambiental</li>
+                            <li>Decoración natural con plantas</li>
+                        </ul>
+                    </div>
+                `,
+                width: '600px',
+                confirmButtonText: 'Cerrar',
+                confirmButtonColor: '#3d2e24',
+                background: document.body.classList.contains('dark-mode') ? '#1a1a1a' : '#fff'
+            });
+        }
+
+        function mostrarInfoJardin() {
+            Swal.fire({
+                title: '<span style="color: #d4af37;">🌳 JARDÍN</span>',
+                html: `
+                    <div style="text-align: left; padding: 20px;">
+                        <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&q=80" 
+                             style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
+                        
+                        <h4 style="color: #d4af37; margin-bottom: 15px;">✨ Características</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li><strong>Capacidad:</strong> Hasta 60 personas</li>
+                            <li><strong>Ambiente:</strong> Espacio verde rodeado de naturaleza</li>
+                            <li><strong>Ideal para:</strong> Celebraciones, eventos sociales, bodas pequeñas</li>
+                            <li><strong>Extras:</strong> Pérgola, iluminación decorativa, área de jardín</li>
+                        </ul>
+
+                        <h4 style="color: #d4af37; margin: 20px 0 15px 0;">🍽️ Servicios Incluidos</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li>Mobiliario completo para eventos</li>
+                            <li>Sistema de sonido</li>
+                            <li>Decoración con flores naturales</li>
+                            <li>Servicio personalizado de catering</li>
+                        </ul>
+                    </div>
+                `,
+                width: '600px',
+                confirmButtonText: 'Cerrar',
+                confirmButtonColor: '#3d2e24',
+                background: document.body.classList.contains('dark-mode') ? '#1a1a1a' : '#fff'
+            });
+        }
+
+        function mostrarInfoSalonVIP() {
+            Swal.fire({
+                title: '<span style="color: #d4af37;">👑 SALÓN VIP</span>',
+                html: `
+                    <div style="text-align: left; padding: 20px;">
+                        <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=600&q=80" 
+                             style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
+                        
+                        <h4 style="color: #d4af37; margin-bottom: 15px;">✨ Características</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li><strong>Capacidad:</strong> Hasta 30 personas</li>
+                            <li><strong>Ambiente:</strong> Exclusivo y privado con servicio premium</li>
+                            <li><strong>Ideal para:</strong> Eventos corporativos, cenas de gala, celebraciones VIP</li>
+                            <li><strong>Extras:</strong> Aire acondicionado, iluminación regulable, privacidad total</li>
+                        </ul>
+
+                        <h4 style="color: #d4af37; margin: 20px 0 15px 0;">🍽️ Servicios Incluidos</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li>Servicio exclusivo de sommelier</li>
+                            <li>Menú personalizado</li>
+                            <li>Vajilla y cristalería de lujo</li>
+                            <li>Sistema audiovisual profesional</li>
+                        </ul>
+                    </div>
+                `,
+                width: '600px',
+                confirmButtonText: 'Cerrar',
+                confirmButtonColor: '#3d2e24',
+                background: document.body.classList.contains('dark-mode') ? '#1a1a1a' : '#fff'
+            });
+        }
+
+        function mostrarInfoBar() {
+            Swal.fire({
+                title: '<span style="color: #d4af37;">🍸 EL BAR</span>',
+                html: `
+                    <div style="text-align: left; padding: 20px;">
+                        <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&q=80" 
+                             style="width: 100%; border-radius: 15px; margin-bottom: 20px;">
+                        
+                        <h4 style="color: #d4af37; margin-bottom: 15px;">✨ Características</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li><strong>Capacidad:</strong> Hasta 25 personas</li>
+                            <li><strong>Ambiente:</strong> Sofisticado y moderno</li>
+                            <li><strong>Ideal para:</strong> After office, reuniones casuales, cócteles</li>
+                            <li><strong>Extras:</strong> Barra completa, TV screens, música en vivo ocasional</li>
+                        </ul>
+
+                        <h4 style="color: #d4af37; margin: 20px 0 15px 0;">🍽️ Servicios Incluidos</h4>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li>Amplia carta de cócteles artesanales</li>
+                            <li>Selección premium de licores</li>
+                            <li>Tapas y bocadillos gourmet</li>
+                            <li>Servicio de bartender especializado</li>
+                        </ul>
+                    </div>
+                `,
+                width: '600px',
+                confirmButtonText: 'Cerrar',
+                confirmButtonColor: '#3d2e24',
+                background: document.body.classList.contains('dark-mode') ? '#1a1a1a' : '#fff'
+            });
+        }
+
+        // ========================================
+        // VALIDACIÓN EN TIEMPO REAL DE FORMULARIOS
+        // ========================================
+
+        // Validar que NOMBRE solo acepte letras (sin números)
+        document.getElementById('regNombre').addEventListener('input', function (e) {
+            // Remover cualquier número que se intente escribir
+            this.value = this.value.replace(/[0-9]/g, '');
+
+            // Opcional: mostrar feedback visual
+            if (/[0-9]/.test(e.data)) {
+                this.classList.add('is-invalid');
+                setTimeout(() => this.classList.remove('is-invalid'), 1000);
+            }
+        });
+
+        // Validar que APELLIDO solo acepte letras (sin números)
+        document.getElementById('regApellido').addEventListener('input', function (e) {
+            // Remover cualquier número que se intente escribir
+            this.value = this.value.replace(/[0-9]/g, '');
+
+            // Opcional: mostrar feedback visual
+            if (/[0-9]/.test(e.data)) {
+                this.classList.add('is-invalid');
+                setTimeout(() => this.classList.remove('is-invalid'), 1000);
+            }
+        });
+
+        // Validar que CÉDULA solo acepte números (máximo 10 dígitos)
+        document.getElementById('regCedula').addEventListener('input', function (e) {
+            // Remover cualquier letra y limitar a 10 dígitos
+            this.value = this.value.replace(/[^0-9]/g, '').substring(0, 10);
+        });
+
+        // Validar que TELÉFONO solo acepte números (máximo 10 dígitos)
+        document.getElementById('regTelefono').addEventListener('input', function (e) {
+            // Remover cualquier letra y limitar a 10 dígitos
+            this.value = this.value.replace(/[^0-9]/g, '').substring(0, 10);
+        });
+
+        // Prevenir pegado de números en nombre y apellido
+        document.getElementById('regNombre').addEventListener('paste', function (e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const cleanText = pastedText.replace(/[0-9]/g, '');
+            document.execCommand('insertText', false, cleanText);
+        });
+
+        document.getElementById('regApellido').addEventListener('paste', function (e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const cleanText = pastedText.replace(/[0-9]/g, '');
+            document.execCommand('insertText', false, cleanText);
+        });
+
+        // Prevenir pegado de letras en cédula
+        document.getElementById('regCedula').addEventListener('paste', function (e) {
+            e.preventDefault();
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const cleanText = pastedText.replace(/[^0-9]/g, '').substring(0, 10);
+            document.execCommand('insertText', false, cleanText);
+        });
+    </script>
+
+    <!-- Script de reserva de zonas -->
+    <script src="public/js/reserva-zonas.js"></script>
+
+    <script>
+        // ========================================
+        // MANEJADOR DE RESERVA DE ZONAS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnReservaZona = document.getElementById('btn-reserva-zona-index');
+            if (btnReservaZona) {
+                btnReservaZona.addEventListener('click', function () {
+                    // Verificar si el usuario está autenticado
+                    fetch('app/verificar_sesion_cliente.php')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.autenticado) {
+                                // Si está autenticado, mostrar modal de reserva de zona
+                                if (typeof mostrarReservaZona === 'function') {
+                                    mostrarReservaZona();
+                                } else {
+                                    console.error('Función mostrarReservaZona no disponible');
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'No se pudo cargar el módulo de reservas',
+                                        confirmButtonColor: '#d4af37'
+                                    });
+                                }
+                            } else {
+                                // Si no está autenticado, mostrar mensaje elegante
+                                Swal.fire({
+                                    title: '<span style="color: #d4af37;">🔐 Acceso Requerido</span>',
+                                    html: `
+                                        <div style="text-align: center; padding: 20px;">
+                                            <p style="color: #666; font-size: 1.1rem; margin-bottom: 20px;">
+                                                Para reservar espacios completos necesitas iniciar sesión o crear una cuenta
+                                            </p>
+                                            <div style="background: #f5f2ed; padding: 20px; border-radius: 15px; margin: 20px 0;">
+                                                <p style="color: #3d2e24; font-weight: 600; margin-bottom: 10px;">
+                                                    <i class="bi bi-check-circle-fill" style="color: #d4af37;"></i> Acceso a reservas de zonas
+                                                </p>
+                                                <p style="color: #3d2e24; font-weight: 600; margin-bottom: 10px;">
+                                                    <i class="bi bi-check-circle-fill" style="color: #d4af37;"></i> Ver menú exclusivo
+                                                </p>
+                                                <p style="color: #3d2e24; font-weight: 600;">
+                                                    <i class="bi bi-check-circle-fill" style="color: #d4af37;"></i> Historial de reservas
+                                                </p>
+                                            </div>
+                                        </div>
+                                    `,
+                                    icon: 'info',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3d2e24',
+                                    cancelButtonColor: '#999',
+                                    confirmButtonText: '<i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión',
+                                    cancelButtonText: 'Cancelar',
+                                    background: '#fff',
+                                    width: '600px'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Abrir modal del cliente
+                                        const btnLogin = document.getElementById('btn-cliente-login');
+                                        if (btnLogin) {
+                                            btnLogin.click();
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error verificando sesión:', error);
+                            // En caso de error, mostrar mensaje
+                            Swal.fire({
+                                title: 'Inicia Sesión',
+                                text: 'Debes iniciar sesión para reservar zonas',
+                                icon: 'info',
+                                confirmButtonColor: '#d4af37',
+                                confirmButtonText: 'Iniciar Sesión'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    const btnLogin = document.getElementById('btn-cliente-login');
+                                    if (btnLogin) {
+                                        btnLogin.click();
+                                    }
+                                }
+                            });
+                        });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

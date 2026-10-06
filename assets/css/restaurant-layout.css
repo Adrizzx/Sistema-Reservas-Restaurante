@@ -1,0 +1,565 @@
+/* Estilos para la visualización realista del restaurante */
+.restaurant-layout {
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(45, 27, 18, 0.05) 0%, transparent 50%),
+        linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 500px;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid rgba(212, 175, 55, 0.2);
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.restaurant-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: 
+        linear-gradient(90deg, #2d1b12 0%, #4a2c17 50%, #2d1b12 100%),
+        repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(212, 175, 55, 0.1) 20px, rgba(212, 175, 55, 0.1) 40px);
+    border-radius: 20px 20px 0 0;
+    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
+}
+
+/* Elementos decorativos del restaurante */
+.restaurant-layout::after {
+    content: '🕯️ 🌿 🍷 🌿 🕯️';
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    opacity: 0.4;
+    z-index: 1;
+}
+
+.restaurant-title {
+    position: absolute;
+    top: 8px;
+    left: 20px;
+    color: #d4af37;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.restaurant-zones {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    height: 350px;
+}
+
+.zone {
+    position: relative;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+/* Zonas temáticas del restaurante */
+.zone-interior {
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(52, 152, 219, 0.15), rgba(52, 152, 219, 0.05)),
+        repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(52, 152, 219, 0.02) 10px, rgba(52, 152, 219, 0.02) 20px);
+    border: 3px solid rgba(52, 152, 219, 0.3);
+    border-radius: 15px;
+    box-shadow: inset 0 2px 4px rgba(52, 152, 219, 0.1);
+}
+
+.zone-terraza {
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.05)),
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="%232ecc71" opacity="0.05"><circle cx="2" cy="2" r="1"/><circle cx="18" cy="18" r="1"/><circle cx="10" cy="10" r="0.5"/></svg>');
+    border: 3px solid rgba(46, 204, 113, 0.4);
+    border-radius: 20px;
+    box-shadow: inset 0 2px 4px rgba(46, 204, 113, 0.1);
+}
+
+.zone-vip {
+    background: 
+        radial-gradient(circle at 50% 30%, rgba(155, 89, 182, 0.2), rgba(155, 89, 182, 0.05)),
+        linear-gradient(45deg, rgba(212, 175, 55, 0.05) 25%, transparent 25%, transparent 75%, rgba(212, 175, 55, 0.05) 75%);
+    border: 3px solid rgba(155, 89, 182, 0.4);
+    border-radius: 15px;
+    box-shadow: 
+        inset 0 2px 4px rgba(155, 89, 182, 0.1),
+        0 0 20px rgba(212, 175, 55, 0.1);
+    position: relative;
+}
+
+/* Decoración VIP */
+.zona-vip::after {
+    content: "✨";
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 16px;
+    animation: sparkle 2s infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+/* Animación de entrada para mesas */
+@keyframes mesaFadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotateY(-180deg);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1) rotateY(-90deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotateY(0deg);
+    }
+}
+
+/* Animación de clic en mesa */
+@keyframes mesaClick {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    25% {
+        transform: scale(0.95) rotateZ(-2deg);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    }
+    50% {
+        transform: scale(1.15) rotateZ(1deg);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+    75% {
+        transform: scale(1.05) rotateZ(-0.5deg);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    100% {
+        transform: scale(1) rotateZ(0deg);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+}
+
+/* Clase para mesa clicada */
+.mesa-clicked {
+    animation: mesaClick 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 10;
+}
+
+/* Animación de ondas al hacer clic */
+.mesa-clicked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    0% {
+        width: 10px;
+        height: 10px;
+        opacity: 1;
+    }
+    100% {
+        width: 80px;
+        height: 80px;
+        opacity: 0;
+    }
+}
+
+/* Animación de brillo para mesa seleccionada */
+.mesa:hover {
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    100% {
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* Animaciones para decoraciones de zonas */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes sway {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-5px); }
+    60% { transform: translateY(-3px); }
+}
+
+/* Mejoras visuales para iconos de zona */
+.zone-interior::before {
+    content: "🏠";
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 16px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.zone-terraza::before {
+    content: "🌿";
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 16px;
+    animation: sway 4s ease-in-out infinite;
+}
+
+.zone-bar::before {
+    content: "🍺";
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    font-size: 16px;
+    animation: bounce 2s ease-in-out infinite;
+}
+
+/* Efectos de brillo en zonas */
+.zone-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.zone-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+    pointer-events: none;
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Distribución de mesas por zona - Sistema simple */
+.mesas-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px;
+    min-height: 120px;
+}
+
+.zone-interior .mesas-container {
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.zone-terraza .mesas-container {
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.zone-vip .mesas-container {
+    justify-content: center;
+    gap: 25px;
+}
+
+.zone-bar .mesas-container {
+    justify-content: space-around;
+    gap: 12px;
+}
+
+.zone-bar {
+    background: 
+        radial-gradient(circle at 70% 30%, rgba(230, 126, 34, 0.2), rgba(230, 126, 34, 0.05)),
+        repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(230, 126, 34, 0.05) 5px, rgba(230, 126, 34, 0.05) 10px);
+    border: 3px solid rgba(230, 126, 34, 0.4);
+    border-radius: 10px;
+    box-shadow: inset 0 2px 4px rgba(230, 126, 34, 0.1);
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+.zone-label {
+    position: absolute;
+    top: -8px;
+    left: 15px;
+    background: white;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #495057;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Mesas realistas con efecto 3D */
+.mesa {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    border: 3px solid rgba(255,255,255,0.3);
+    transform-origin: center;
+    box-shadow: 
+        0 8px 16px rgba(0,0,0,0.2),
+        inset 0 2px 0 rgba(255,255,255,0.4),
+        inset 0 -2px 0 rgba(0,0,0,0.2);
+}
+
+.mesa::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.3), transparent, rgba(0,0,0,0.1));
+    z-index: -1;
+}
+
+.mesa::after {
+    content: '🪑';
+    position: absolute;
+    bottom: -15px;
+    right: -8px;
+    font-size: 16px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.mesa:hover {
+    transform: scale(1.15) translateY(-5px);
+    box-shadow: 
+        0 15px 30px rgba(0,0,0,0.3),
+        0 0 0 4px rgba(212, 175, 55, 0.4);
+    z-index: 10;
+}
+
+/* Hover simple para todas las mesas */
+
+.mesa:hover::after {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* Estados de mesa más realistas */
+.mesa-disponible {
+    background: 
+        radial-gradient(circle at 30% 30%, #32d74b, #28a745, #1e7e34);
+    border-color: rgba(30, 126, 52, 0.8);
+    animation: pulseGreen 3s ease-in-out infinite;
+}
+
+.mesa-ocupada {
+    background: 
+        radial-gradient(circle at 30% 30%, #ff4757, #dc3545, #bd2130);
+    border-color: rgba(189, 33, 48, 0.8);
+    animation: pulseRed 2s ease-in-out infinite;
+}
+
+.mesa-reservada {
+    background: 
+        radial-gradient(circle at 30% 30%, #ffd700, #ffc107, #e0a800);
+    border-color: rgba(224, 168, 0, 0.8);
+    color: #212529;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+    animation: pulseYellow 2.5s ease-in-out infinite;
+}
+
+.mesa-mantenimiento {
+    background: 
+        radial-gradient(circle at 30% 30%, #748c94, #6c757d, #545b62);
+    border-color: rgba(84, 91, 98, 0.8);
+    opacity: 0.7;
+}
+
+/* Animaciones sutiles */
+@keyframes pulseGreen {
+    0%, 100% { box-shadow: 0 8px 16px rgba(0,0,0,0.2), 0 0 0 0 rgba(40, 167, 69, 0.4); }
+    50% { box-shadow: 0 8px 16px rgba(0,0,0,0.2), 0 0 0 8px rgba(40, 167, 69, 0.1); }
+}
+
+@keyframes pulseRed {
+    0%, 100% { box-shadow: 0 8px 16px rgba(0,0,0,0.2), 0 0 0 0 rgba(220, 53, 69, 0.4); }
+    50% { box-shadow: 0 8px 16px rgba(0,0,0,0.2), 0 0 0 6px rgba(220, 53, 69, 0.2); }
+}
+
+@keyframes pulseYellow {
+    0%, 100% { box-shadow: 0 8px 16px rgba(0,0,0,0.2), 0 0 0 0 rgba(255, 193, 7, 0.4); }
+    50% { box-shadow: 0 8px 16px rgba(0,0,0,0.2), 0 0 0 6px rgba(255, 193, 7, 0.2); }
+}
+
+.mesa-tooltip {
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(45, 27, 18, 0.95), rgba(74, 44, 23, 0.95));
+    color: #d4af37;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 20;
+    margin-bottom: 8px;
+    box-shadow: 
+        0 10px 25px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    backdrop-filter: blur(10px);
+    min-width: 120px;
+    text-align: left;
+}
+
+.mesa-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(0,0,0,0.9);
+}
+
+.mesa:hover .mesa-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
+
+.restaurant-legend {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #495057;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+.restaurant-stats {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-size: 11px;
+    min-width: 120px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.stat-row:last-child {
+    margin-bottom: 0;
+    padding-top: 4px;
+    border-top: 1px solid #dee2e6;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .restaurant-zones {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, 1fr);
+        height: auto;
+        min-height: 600px;
+    }
+    
+    .mesa {
+        width: 45px;
+        height: 45px;
+        font-size: 10px;
+    }
+    
+    .restaurant-stats {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 15px;
+        width: 100%;
+    }
+}
+
+.loading-restaurant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 350px;
+    color: #6c757d;
+}
+
+.loading-restaurant .spinner-border {
+    color: #d4af37;
+    margin-bottom: 15px;
+}

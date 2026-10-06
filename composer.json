@@ -1,0 +1,23 @@
+{
+    "name": "proyecto-reservas/testing",
+    "description": "Sistema de Testing para Proyecto de Reservas de Restaurante",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tests\\": "testing-infrastructure/tests/"
+        }
+    },
+    "config": {
+        "vendor-dir": "testing-infrastructure/vendor"
+    },
+    "scripts": {
+        "test": "phpunit --configuration testing-infrastructure/config/phpunit.xml",
+        "test:unit": "phpunit --configuration testing-infrastructure/config/phpunit.xml --testsuite=Unit",
+        "test:models": "phpunit --configuration testing-infrastructure/config/phpunit.xml --testsuite=Models",
+        "test:controllers": "phpunit --configuration testing-infrastructure/config/phpunit.xml --testsuite=Controllers",
+        "test:validators": "phpunit --configuration testing-infrastructure/config/phpunit.xml --testsuite=Validators"
+    }
+}

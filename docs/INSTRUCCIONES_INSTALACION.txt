@@ -1,0 +1,161 @@
+================================================================================
+  INSTRUCCIONES DE INSTALACIÓN - SISTEMA DE RESERVAS DE RESTAURANTE
+================================================================================
+
+REQUISITOS DEL SISTEMA:
+-----------------------
+- Sistema Operativo: Linux (Ubuntu, Debian, WSL, VM, etc.)
+- LAMPP/XAMPP para Linux instalado
+- Acceso a terminal con permisos sudo
+
+================================================================================
+PASOS DE INSTALACIÓN:
+================================================================================
+
+1. ACTUALIZAR SISTEMA
+---------------------
+Abrir terminal y ejecutar:
+
+sudo apt-get update
+
+
+2. INSTALAR PYTHON3
+-------------------
+sudo apt-get install -y python3 python3-full python3-pip
+
+
+3. INSTALAR DEPENDENCIAS DE PYTHON
+----------------------------------
+Copiar y pegar estos comandos uno por uno:
+
+sudo apt-get install -y python3-pymysql
+sudo apt-get install -y python3-openpyxl
+sudo apt-get install -y python3-pandas
+sudo apt-get install -y python3-slugify
+
+
+4. VERIFICAR INSTALACIÓN
+------------------------
+Ejecutar este comando para verificar que todo está instalado:
+
+python3 -c "import pymysql, openpyxl, pandas; from slugify import slugify; print('✓ Todas las dependencias instaladas correctamente')"
+
+Si ves el mensaje de éxito, todo está bien instalado.
+
+
+5. DAR PERMISOS A LOS SCRIPTS
+-----------------------------
+cd /opt/lampp/htdocs/PRY_PROYECTO
+chmod +x app/api/update_from_excel.py
+chmod +x app/api/crear_excel_ejemplo.py
+chmod +x install_dependencies.sh
+
+
+6. CREAR DIRECTORIOS NECESARIOS
+-------------------------------
+mkdir -p uploads
+mkdir -p storage/logs
+chmod 777 uploads
+chmod 777 storage/logs
+
+
+================================================================================
+INSTALACIÓN AUTOMÁTICA (OPCIONAL):
+================================================================================
+
+Si prefieres instalar todo automáticamente, ejecuta:
+
+cd /opt/lampp/htdocs/PRY_PROYECTO
+sudo bash install_dependencies.sh
+
+
+================================================================================
+SOLUCIÓN DE PROBLEMAS:
+================================================================================
+
+PROBLEMA 1: "ModuleNotFoundError: No module named 'pymysql'"
+SOLUCIÓN:
+sudo apt-get install python3-pymysql
+
+
+PROBLEMA 2: "ModuleNotFoundError: No module named 'openpyxl'"
+SOLUCIÓN:
+sudo apt-get install python3-openpyxl
+
+
+PROBLEMA 3: "ModuleNotFoundError: No module named 'pandas'"
+SOLUCIÓN:
+sudo apt-get install python3-pandas
+
+
+PROBLEMA 4: "ModuleNotFoundError: No module named 'slugify'"
+SOLUCIÓN:
+sudo apt-get install python3-slugify
+
+
+PROBLEMA 5: "version 'CXXABI_1.3.9' not found"
+SOLUCIÓN: Ya está solucionado en el código (unset LD_LIBRARY_PATH)
+
+
+PROBLEMA 6: "Permission denied" al ejecutar scripts
+SOLUCIÓN:
+chmod +x app/api/update_from_excel.py
+chmod +x app/api/crear_excel_ejemplo.py
+
+
+================================================================================
+VERIFICACIÓN FINAL:
+================================================================================
+
+1. Verificar Python:
+   which python3
+   Debería mostrar: /usr/bin/python3
+
+2. Verificar módulos:
+   python3 -c "import pymysql; print('pymysql OK')"
+   python3 -c "import openpyxl; print('openpyxl OK')"
+   python3 -c "import pandas; print('pandas OK')"
+   python3 -c "from slugify import slugify; print('slugify OK')"
+
+3. Probar el sistema:
+   - Iniciar LAMPP: sudo /opt/lampp/lampp start
+   - Ir a: http://localhost/PRY_PROYECTO/admin.php
+   - Probar subir un archivo Excel
+
+================================================================================
+COMANDOS RÁPIDOS (COPIAR Y PEGAR TODO):
+================================================================================
+
+sudo apt-get update && \
+sudo apt-get install -y python3 python3-full python3-pip && \
+sudo apt-get install -y python3-pymysql python3-openpyxl python3-pandas python3-slugify && \
+cd /opt/lampp/htdocs/PRY_PROYECTO && \
+chmod +x app/api/update_from_excel.py && \
+chmod +x app/api/crear_excel_ejemplo.py && \
+mkdir -p uploads storage/logs && \
+chmod 777 uploads storage/logs && \
+python3 -c "import pymysql, openpyxl, pandas; from slugify import slugify; print('✓ TODO INSTALADO CORRECTAMENTE')"
+
+
+================================================================================
+NOTAS IMPORTANTES:
+================================================================================
+
+1. Este sistema funciona SOLO en Linux (no Windows nativo, solo WSL)
+2. Requiere LAMPP/XAMPP para Linux instalado
+3. Todos los comandos deben ejecutarse en terminal Linux
+4. El sistema detecta automáticamente la ruta de Python3
+5. Compatible con: Ubuntu, Debian, WSL, Máquinas Virtuales, etc.
+
+================================================================================
+SOPORTE:
+================================================================================
+
+Si después de seguir todos los pasos sigue sin funcionar:
+
+1. Verificar que LAMPP esté iniciado: sudo /opt/lampp/lampp status
+2. Verificar permisos de carpetas: ls -la uploads/
+3. Revisar logs en: storage/logs/excel_upload.log
+4. Verificar versión de Python: python3 --version (debe ser 3.8+)
+
+================================================================================

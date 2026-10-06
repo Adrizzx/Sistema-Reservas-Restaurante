@@ -1,0 +1,52 @@
+# Archivos de configuración con credenciales sensibles
+.env
+.env.local
+.env.*.local
+
+# Archivos con credenciales reales (usa los .example en su lugar)
+config/whatsapp_config.php
+conexion/db.php
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+*.Zone.Identifier
+
+# Directorios de logs
+storage/logs/*
+public/logs/*
+*.log
+
+# Archivos subidos por usuarios
+public/uploads/*
+uploads/*
+!public/uploads/.gitkeep
+!uploads/.gitkeep
+
+# Archivos temporales
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Dependencias (si usas Composer)
+vendor/
+
+# Node modules (si usas npm)
+node_modules/
+
+# Archivos de IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backups
+*.backup
+*.bak
+*.old
+
+# Archivos de caché
+cache/
+*.cache

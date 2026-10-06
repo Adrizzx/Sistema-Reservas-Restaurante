@@ -1,0 +1,147 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                   🏰 LE SALON DE LUMIÈRE - MVC                          ║
+║                     Restaurant Management System                         ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+📦 PRY_PROYECTO/
+┃
+┣━━ 📂 config/                    ⚙️  CONFIGURACIÓN
+┃   ┣━━ config.php               → Constantes y configuración global
+┃   ┗━━ database.php             → Singleton PDO + conexión DB
+┃
+┣━━ 📂 models/                    🗄️  MODELOS (Data Layer)
+┃   ┣━━ Mesa.php                 → CRUD Mesas + estado + precios
+┃   ┣━━ Cliente.php              → CRUD Clientes + autenticación
+┃   ┣━━ Reserva.php              → CRUD Reservas + validaciones
+┃   ┣━━ Plato.php                → CRUD Platos + categorización
+┃   ┗━━ Categoria.php            → CRUD Categorías + menú completo
+┃
+┣━━ 📂 controllers/               🎮 CONTROLADORES (Business Logic)
+┃   ┣━━ AuthController.php       → Login/Registro/Logout/Sesiones
+┃   ┣━━ MesaController.php       → Gestión mesas + selección
+┃   ┣━━ ReservaController.php    → Crear/Editar/Cancelar reservas
+┃   ┗━━ MenuController.php       → Menú gastronómico completo
+┃
+┣━━ 📂 views/                     📺 VISTAS (Presentation Layer)
+┃   ┣━━ pages/
+┃   ┃   ┣━━ index.html           → 🏠 Home con galería + menú
+┃   ┃   ┣━━ mesas.php            → 🪑 Selección de mesas
+┃   ┃   ┣━━ admin.php            → 👨‍💼 Panel administrativo
+┃   ┃   ┗━━ registro.php         → ✍️  Registro clientes
+┃   ┣━━ layouts/                 → (Futuro: navbars, footers)
+┃   ┗━━ components/              → (Futuro: cards, modals)
+┃
+┣━━ 📂 assets/                    🎨 ASSETS ESTÁTICOS
+┃   ┣━━ css/                     → Estilos CSS custom
+┃   ┃   ┣━━ style.css
+┃   ┃   ┣━━ restaurant-layout.css
+┃   ┃   ┗━━ restaurant-layout-new.css
+┃   ┣━━ js/                      → JavaScript custom
+┃   ┃   ┣━━ dashboard-api.js
+┃   ┃   ┣━━ gestion-mesas.js
+┃   ┃   ┣━━ gestion-reservas.js
+┃   ┃   ┗━━ restaurant-layout-new.js
+┃   ┣━━ bootstrap/               → Framework Bootstrap 5
+┃   ┗━━ images/                  → Imágenes del proyecto
+┃
+┣━━ 📂 app/                       🔌 API ENDPOINTS
+┃   ┗━━ api/
+┃       ┣━━ 🆕 mesas_estado_mvc.php       → GET estado mesas [MVC]
+┃       ┣━━ 🆕 seleccionar_mesa_mvc.php   → POST seleccionar mesa [MVC]
+┃       ┣━━ 🆕 obtener_menu_mvc.php       → GET menú completo [MVC]
+┃       ┣━━ 🆕 login_cliente_mvc.php      → POST login [MVC]
+┃       ┣━━ 🆕 registro_cliente_mvc.php   → POST registro [MVC]
+┃       ┣━━ 🆕 crear_reserva_mvc.php      → POST reserva [MVC]
+┃       ┃
+┃       ┗━━ 📜 *.php (legacy)            → APIs originales
+┃
+┣━━ 📂 public/                    📤 PÚBLICOS
+┃   ┣━━ uploads/                 → Archivos subidos (Excel, imágenes)
+┃   ┗━━ logs/                    → Logs del sistema
+┃
+┣━━ 📂 conexion/                  🔗 LEGACY (Compatibilidad)
+┃   ┗━━ db.php                   → Conexión original (mantener)
+┃
+┣━━ 📂 storage/                   �� ALMACENAMIENTO
+┃   ┗━━ logs/
+┃
+┣━━ 📂 utils/                     🛠️  UTILIDADES
+┃   ┗━━ imagen/
+┃
+┣━━ 📄 MVC_ESTRUCTURA.md          📚 Documentación MVC completa
+┣━━ 📄 PRECIOS_MESAS_README.md   📚 Doc precios automáticos
+┣━━ 📄 FORMATO_EXCEL_MENU.md     📚 Doc formato Excel menú
+┗━━ 🔧 verificar_mvc.sh           ✅ Script de verificación
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        🔄 FLUJO DE DATOS MVC                            ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+   👤 USUARIO
+    │
+    │ 1. Interacción (clic, formulario)
+    ↓
+   📺 VIEW (index.html, mesas.php)
+    │
+    │ 2. fetch() AJAX Request
+    ↓
+   🔌 API ENDPOINT (app/api/*_mvc.php)
+    │
+    │ 3. Instancia Controller
+    ↓
+   🎮 CONTROLLER (MesaController, ReservaController)
+    │
+    │ 4. Llama método del Model
+    ↓
+   🗄️  MODEL (Mesa.php, Reserva.php)
+    │
+    │ 5. Query SQL con PDO
+    ↓
+   💾 DATABASE (MySQL - crud_proyecto)
+    │
+    │ 6. Retorna datos
+    ↑
+   🗄️  MODEL procesa y retorna
+    ↑
+   🎮 CONTROLLER valida/formatea
+    ↑
+   🔌 API retorna JSON
+    ↑
+   📺 VIEW renderiza datos
+    ↑
+   👤 USUARIO ve resultado
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                      ✅ CARACTERÍSTICAS IMPLEMENTADAS                    ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+✅ Arquitectura MVC completa
+✅ 5 Modelos con métodos CRUD
+✅ 4 Controladores con lógica de negocio
+✅ Configuración centralizada
+✅ Database Singleton (PDO)
+✅ 6 APIs REST MVC funcionales
+✅ Sistema de autenticación (sesiones)
+✅ Gestión de mesas con precios automáticos
+✅ Sistema de reservas completo
+✅ Menú gastronómico con categorías
+✅ Assets organizados (CSS/JS/Bootstrap)
+✅ Compatibilidad con código legacy
+✅ Documentación completa
+
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                         🎯 VENTAJAS MVC                                 ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+🎯 Separación de responsabilidades (SoC)
+♻️  Reutilización de código
+🔧 Mantenimiento simplificado
+🧪 Facilita testing unitario
+👥 Trabajo en equipo eficiente
+📈 Escalabilidad mejorada
+🔒 Seguridad centralizada
+📚 Código autodocumentado
+
